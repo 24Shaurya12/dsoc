@@ -1,9 +1,9 @@
 import 'dart:async';
-
+import 'package:my_app/user_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/my_app_bar.dart';
 
-void main() =>  runApp(const SignUpPage());
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -11,7 +11,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        title: 'Sign_Up Page',
+        title: 'signUp Page',
         // theme: ThemeData(
         //     primaryColor: Colors.green,
         //     appBarTheme: const AppBarTheme(
@@ -25,7 +25,7 @@ class SignUpPage extends StatelessWidget {
             children: [
               Center(
                 child: Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                   child: Text('Create Account Now!', style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),)),
               ),
               RegistrationForm(),
@@ -35,7 +35,6 @@ class SignUpPage extends StatelessWidget {
     );
   }
 }
-
 
 
 class RegistrationForm extends StatefulWidget {
@@ -52,11 +51,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final _phoneNoController = TextEditingController();
 
   final registrationKey = GlobalKey<FormState>();
-
-  String name = 'John';
-  String email = 'abc@gmail.com';
-  String password = 'Doe';
-  int phoneNo = 1234567890;
 
   @override
   Widget build(BuildContext context) {
@@ -163,19 +157,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (registrationKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Processing Data'))
-                      );
-                    }
-                    setState() {
-                      name = _nameController.text;
-                      password = _passwordController.text;
-                      email = _emailController.text;
-                      phoneNo = int.tryParse(_phoneNoController.text)!;
-                    }
-                  },
+                  onPressed: () {signUp(registrationKey);},
                   style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
                   child: const Text('Sign Up', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
                 ),
@@ -186,51 +168,37 @@ class _RegistrationFormState extends State<RegistrationForm> {
       ),
     );
   }
+
+  Future<void> signUp(GlobalKey<FormState> registrationKey) async {
+    if (registrationKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Processing Data'))
+      );
+    }
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("name", _nameController.text);
+    await prefs.setString("password", _passwordController.text);
+    await prefs.setString("email", _emailController.text);
+    await prefs.setInt("phoneNo", int.tryParse(_phoneNoController.text)!);
+
+    int id = userData.length;
+    print(id);
+
+    userData.add(
+      {
+        "id": id,
+        "name": prefs.getString("name").toString(),
+        "password": prefs.getString("password").toString(),
+        "email": prefs.getString("email").toString(),
+        "phoneNo": prefs.getInt("phoneNo") ?? 0
+      }
+    );
+
+    print(id);
+    print(userData[id]["name"]);
+    print(userData[0]["name"]);
+
+
+  }
 }
-
-
-
-
-
-
-
-
-//     return Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Container(
-//           width: 200,
-//           child: TextField(
-//             controller: _name,
-//             decoration: InputDecoration(
-//                 border: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(10),
-//                 )
-//             ),
-//           ),
-//         ),
-//         const SizedBox(height: 20,),
-//         Container(
-//           width: 200,
-//           child: TextField(
-//             controller: _password,
-//             decoration: InputDecoration(
-//                 border: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(10),
-//
-//                 )
-//             ),
-//           ),
-//         ),
-//         const SizedBox(height: 20,),
-//         ElevatedButton(onPressed: (){
-//           setState(() {
-//             name = _name.text.toString();
-//             password = _password.text;
-//           });
-//         }, child: const Text('Sign_Up')),
-//         const SizedBox(height: 20,),
-//         Text('Username :$name Password :$password'),
-//
-//       ],
-//     )

@@ -1,9 +1,9 @@
 var userData = [
   {
-    "id": 1,
+    "id": 0,
     "name": "John Doe",
     "password": "123",
     "email": "johndoe@gmail.com",
-    "phoneNo": "1234567890"
+    "phoneNo": 1234567890
   }
 ];

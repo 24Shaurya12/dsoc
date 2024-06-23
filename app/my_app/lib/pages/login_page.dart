@@ -1,90 +1,180 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/my_app_bar.dart';
+import 'package:my_app/user_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() =>  runApp(const LoginPage());
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
         title: 'Login Page',
-        theme: ThemeData(
-            primaryColor: Colors.green,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.blue,
-            )
-        ),
+        // theme: ThemeData(
+        //     primaryColor: Colors.green,
+        //     appBarTheme: const AppBarTheme(
+        //       backgroundColor: Colors.blue,
+        //     )
+        // ),
         home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Sample Text'),
+          appBar: MyAppBar(),
+          backgroundColor: Color.fromARGB(255, 16, 44, 87),
+          body: Column(
+            children: [
+              SizedBox(
+                width: 330,
+                child: Text('Welcome Back!',  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
+              SizedBox(
+                width:330,
+                child: Text('Login to continue',textAlign: TextAlign.left, style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),)),
+              LoginForm(),
+            ],
           ),
-          body: const Center(child: LoginColumn()),
+
         )
     );
   }
 }
 
 
-
-class LoginColumn extends StatefulWidget {
-  const LoginColumn({super.key});
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
 
   @override
-  State<LoginColumn> createState() => _LoginColumnState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginColumnState extends State<LoginColumn> {
-  final _name = TextEditingController();
-  final _password = TextEditingController();
+class _LoginFormState extends State<LoginForm> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool rememberMe = false;
 
-  String name = 'John';
-  String password = 'Doe';
+  final loginKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 200,
-          child: TextField(
-            controller: _name,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )
+    return Form(
+      key: loginKey,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Email', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+              child: TextFormField(
+                controller: _emailController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Username';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 255, 250, 239),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(100),
+                      borderSide: const BorderSide(),
+                    )
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(height: 20,),
-        SizedBox(
-          width: 200,
-          child: TextField(
-            controller: _password,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-
-                )
+            const Text('Password', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+              child: TextFormField(
+                controller: _passwordController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Username';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 255, 250, 239),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(100),
+                      borderSide: const BorderSide(),
+                    )
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(height: 20,),
-        ElevatedButton(
-          onPressed: () {
-            setState() {
-              name = _name.text.toString();
-              password = _password.text;
-            }
-          },
-          child: const Text('Login')
-        ),
-        const SizedBox(height: 20,),
-        Text('Username :$name Password :$password'),
+            Row(
+              children: [
+                SizedBox(
+                  height: 16,
+                  width: 16,
+                  child: ColoredBox(
+                    color: Colors.white,
+                    child: Checkbox(
+                      activeColor: Colors.green,
+                      value: rememberMe,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          rememberMe = value!;
+                        });
+                      }
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10,),
+                const Text('Remember me', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,)),
+                const SizedBox(width: 100,),
+                const Text('Forgot password', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,)),
+              ]
+            ),
+            const SizedBox(height: 40,),
+            SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: (){login(loginKey);},
+                style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
+                child: const Text('Login', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
+              ),
+            ),
 
-      ],
+            // Text('Username :$name Password :$password'),
+
+          ],
+        ),
+      ),
     );
+  }
+
+  Future<void> login(GlobalKey<FormState> loginKey) async {
+    loginKey.currentState!.validate();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("password", _passwordController.text);
+    await prefs.setString("email", _emailController.text);
+
+    for (int n=0; n<userData.length; n++) {
+
+      print(userData[n]["email"]);
+      print(userData[n]["password"]);
+
+      if (prefs.getString("email") == userData[n]["email"] && prefs.getString("password") == userData[n]["password"]) {
+        const snackBar = SnackBar(
+          content: Text('Login Successful'),
+          duration: Duration(
+              seconds: 2), // Optional duration to display the SnackBar
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        break;
+      }
+      else {
+        const snackBar = SnackBar(
+          content: Text('Try Again'),
+          duration: Duration(seconds: 2), // Optional duration to display the SnackBar
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
   }
 }

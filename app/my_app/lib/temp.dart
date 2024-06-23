@@ -1,3 +1,53 @@
+// Login Page Previous Version
+//     return Column(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         Container(
+//           width: 200,
+//           child: TextField(
+//             controller: _name,
+//             decoration: InputDecoration(
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(10),
+//                 )
+//             ),
+//           ),
+//         ),
+//         const SizedBox(height: 20,),
+//         Container(
+//           width: 200,
+//           child: TextField(
+//             controller: _password,
+//             decoration: InputDecoration(
+//                 border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(10),
+//
+//                 )
+//             ),
+//           ),
+//         ),
+//         const SizedBox(height: 20,),
+//         ElevatedButton(onPressed: (){
+//           setState(() {
+//             name = _name.text.toString();
+//             password = _password.text;
+//           });
+//         }, child: const Text('signUp')),
+//         const SizedBox(height: 20,),
+//         Text('Username :$name Password :$password'),
+//
+//       ],
+//     )
+
+
+
+
+
+
+
+
+
+
 import 'package:flutter/material.dart';
 
 void main() {

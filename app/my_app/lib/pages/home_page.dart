@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/login_page.dart';
-import 'package:my_app/pages/registeration_page.dart';
+import 'package:my_app/pages/registration_page.dart';
 import 'package:my_app/my_app_bar.dart';
-
 
 
 class HomePage extends StatelessWidget {
