@@ -47,7 +47,7 @@ class _LoginColumnState extends State<LoginColumn> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 200,
           child: TextField(
             controller: _name,
@@ -59,7 +59,7 @@ class _LoginColumnState extends State<LoginColumn> {
           ),
         ),
         const SizedBox(height: 20,),
-        Container(
+        SizedBox(
           width: 200,
           child: TextField(
             controller: _password,
@@ -72,12 +72,15 @@ class _LoginColumnState extends State<LoginColumn> {
           ),
         ),
         const SizedBox(height: 20,),
-        ElevatedButton(onPressed: (){
-          setState(() {
-            name = _name.text.toString();
-            password = _password.text;
-          });
-        }, child: const Text('Login')),
+        ElevatedButton(
+          onPressed: () {
+            setState() {
+              name = _name.text.toString();
+              password = _password.text;
+            }
+          },
+          child: const Text('Login')
+        ),
         const SizedBox(height: 20,),
         Text('Username :$name Password :$password'),
 

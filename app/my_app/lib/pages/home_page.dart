@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/login_page.dart';
 import 'package:my_app/pages/registeration_page.dart';
+import 'package:my_app/my_app_bar.dart';
+
 
 
 class HomePage extends StatelessWidget {
@@ -9,17 +11,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const MyAppBar(),
       backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       body: Column(
         children: [
-          const SizedBox(height: 45,),
-          const Row(
-            children: [
-              Expanded(child: Center(child: Text(style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30), 'DSOC'))),
-              SizedBox(width: 70),
-              Expanded(child: Icon(Icons.menu, color: Colors.white, size: 40,)),
-            ],
-          ),
           Container(padding: const EdgeInsets.all(45.0), child: const Image(image: AssetImage('assets/logo.png'))),
           const Text(textAlign: TextAlign.center,'Hello, Welcome!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
           const SizedBox(height: 20,),
