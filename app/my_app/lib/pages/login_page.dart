@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/my_app_bar.dart';
-import 'package:my_app/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -139,8 +138,6 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
 
-            // Text('Username :$name Password :$password'),
-
           ],
         ),
       ),
@@ -151,30 +148,31 @@ class _LoginFormState extends State<LoginForm> {
     loginKey.currentState!.validate();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("password", _passwordController.text);
-    await prefs.setString("email", _emailController.text);
 
-    for (int n=0; n<userData.length; n++) {
+    // print(prefs.getString("email"));
+    // print(_emailController.text);
+    // print(prefs.getString("password"));
+    // print(_passwordController.text);
 
-      print(userData[n]["email"]);
-      print(userData[n]["password"]);
+    String email = _emailController.text;
 
-      if (prefs.getString("email") == userData[n]["email"] && prefs.getString("password") == userData[n]["password"]) {
-        const snackBar = SnackBar(
-          content: Text('Login Successful'),
-          duration: Duration(
-              seconds: 2), // Optional duration to display the SnackBar
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        break;
-      }
-      else {
-        const snackBar = SnackBar(
-          content: Text('Try Again'),
-          duration: Duration(seconds: 2), // Optional duration to display the SnackBar
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
+    if (prefs.getString("$email password") == _passwordController.text) {
+      const snackBar = SnackBar(
+        content: Text('Login Successful'),
+        duration: Duration(
+            seconds: 1), // Optional duration to display the SnackBar
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // break;
     }
+    else {
+      const snackBar = SnackBar(
+        content: Text('Try Again'),
+        duration: Duration(
+            seconds: 2), // Optional duration to display the SnackBar
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  // }
   }
 }

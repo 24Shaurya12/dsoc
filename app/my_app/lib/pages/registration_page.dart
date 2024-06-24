@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:my_app/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/my_app_bar.dart';
@@ -55,7 +54,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: registrationKey,
+    key: registrationKey,
       child: DefaultTextStyle(
         style: const TextStyle(
           fontWeight: FontWeight.w900,
@@ -172,33 +171,20 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Future<void> signUp(GlobalKey<FormState> registrationKey) async {
     if (registrationKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Processing Data'))
+          const SnackBar(
+            content: Text('Processing Data'),
+            duration: Duration(
+              seconds: 1,
+            ),
+          )
       );
     }
 
+    String email = _emailController.text;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("name", _nameController.text);
-    await prefs.setString("password", _passwordController.text);
-    await prefs.setString("email", _emailController.text);
-    await prefs.setInt("phoneNo", int.tryParse(_phoneNoController.text)!);
-
-    int id = userData.length;
-    print(id);
-
-    userData.add(
-      {
-        "id": id,
-        "name": prefs.getString("name").toString(),
-        "password": prefs.getString("password").toString(),
-        "email": prefs.getString("email").toString(),
-        "phoneNo": prefs.getInt("phoneNo") ?? 0
-      }
-    );
-
-    print(id);
-    print(userData[id]["name"]);
-    print(userData[0]["name"]);
-
-
+    await prefs.setString("$email name", _nameController.text);
+    await prefs.setString("$email password", _passwordController.text);
+    await prefs.setInt("$email phoneNo", int.tryParse(_phoneNoController.text)!);
   }
 }
