@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+
+class MyAppBar extends StatelessWidget {
   const MyAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: const Color.fromARGB(255, 16, 44, 87),
-      toolbarHeight: 150,
       title: const Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(child: Center(child: Text('DSOC', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.white)))),
-          SizedBox(width: 100),
-          Expanded(child: Icon(Icons.menu, color: Colors.white, size: 40)),
+          Expanded(child: Center(child: Text('DSOC', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white)))),
+          SizedBox(width: 200),
+          Expanded(child: Icon(FontAwesomeIcons.barsStaggered, color: Colors.white, size: 25)),
         ],
       ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(150);
 }

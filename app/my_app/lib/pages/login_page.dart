@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/my_app_bar.dart';
+import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -8,26 +9,52 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
         title: 'Login Page',
-        // theme: ThemeData(
-        //     primaryColor: Colors.green,
-        //     appBarTheme: const AppBarTheme(
-        //       backgroundColor: Colors.blue,
-        //     )
-        // ),
+        theme: ThemeData(
+          colorScheme: const ColorScheme.light(error: Color.fromARGB(255, 218, 192, 163)),
+        ),
         home: Scaffold(
-          appBar: MyAppBar(),
-          backgroundColor: Color.fromARGB(255, 16, 44, 87),
-          body: Column(
+          backgroundColor: const Color.fromARGB(255, 16, 44, 87),
+          body: ListView(
             children: [
-              SizedBox(
-                width: 330,
+              const MyAppBar(),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(25, 20, 0, 0),
                 child: Text('Welcome Back!',  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
-              SizedBox(
-                width:330,
+              const Padding(
+                padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
                 child: Text('Login to continue',textAlign: TextAlign.left, style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),)),
-              LoginForm(),
+              const LoginForm(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                child: DefaultTextStyle(
+                  style: const TextStyle(color: Colors.white, fontSize: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account?"),
+                      const SizedBox(width: 10,),
+                      Container(
+                        decoration: const BoxDecoration(
+                          border: Border(bottom: BorderSide(color: Color.fromARGB(255, 218, 192, 163), width: 3))
+                        ),
+                        child: GestureDetector(
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 218, 192, 163),
+                                fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/registration_page');
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),)
             ],
           ),
 
@@ -59,51 +86,51 @@ class _LoginFormState extends State<LoginForm> {
         padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Email', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-              child: TextFormField(
-                controller: _emailController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter Username';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    )
+              const Text('Email',textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+                child: TextFormField(
+                  controller: _emailController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter email';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color.fromARGB(255, 255, 250, 239),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100),
+                        borderSide: const BorderSide(),
+                      )
+                  ),
+                ),
+                               ),
+              const Text('Password', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+                child: TextFormField(
+                  controller: _passwordController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter password';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color.fromARGB(255, 255, 250, 239),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100),
+                        borderSide: const BorderSide(),
+                      )
+                  ),
                 ),
               ),
-            ),
-            const Text('Password', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-              child: TextFormField(
-                controller: _passwordController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter Username';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    )
-                ),
-              ),
-            ),
-            Row(
+              Row(
               children: [
                 SizedBox(
                   height: 16,
@@ -126,20 +153,19 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(width: 100,),
                 const Text('Forgot password', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,)),
               ]
-            ),
-            const SizedBox(height: 40,),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: (){login(loginKey);},
-                style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
-                child: const Text('Login', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
+                              ),
+              const SizedBox(height: 40,),
+              SizedBox(
+               width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: (){login(loginKey);},
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
+                  child: const Text('Login', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
+                ),
               ),
-            ),
-
           ],
-        ),
+        )
       ),
     );
   }
@@ -156,7 +182,7 @@ class _LoginFormState extends State<LoginForm> {
 
     String email = _emailController.text;
 
-    if (prefs.getString("$email password") == _passwordController.text) {
+    if (prefs.getString("$email password") == _passwordController.text && _passwordController.text != '') {
       const snackBar = SnackBar(
         content: Text('Login Successful'),
         duration: Duration(

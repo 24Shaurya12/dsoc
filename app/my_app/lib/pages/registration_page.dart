@@ -1,7 +1,7 @@
-import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/my_app_bar.dart';
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SignUpPage extends StatelessWidget {
@@ -9,23 +9,20 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
         title: 'signUp Page',
-        // theme: ThemeData(
-        //     primaryColor: Colors.green,
-        //     appBarTheme: const AppBarTheme(
-        //       backgroundColor: Colors.blue,
-        //     )
-        // ),
+        theme: ThemeData(
+          colorScheme: const ColorScheme.light(error: Color.fromARGB(255, 218, 192, 163)),
+        ),
         home: Scaffold(
-          appBar: MyAppBar(),
-          backgroundColor: Color.fromARGB(255, 16, 44, 87),
-          body: Column(
-            children: [
+          backgroundColor: const Color.fromARGB(255, 16, 44, 87),
+          body: ListView(
+            children: const [
+              MyAppBar(),
               Center(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Text('Create Account Now!', style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),)),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Text('Create Account Now!', style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
               ),
               RegistrationForm(),
             ],
@@ -58,7 +55,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       child: DefaultTextStyle(
         style: const TextStyle(
           fontWeight: FontWeight.w900,
-          fontSize: 25,
+          fontSize: 20,
           color: Colors.white,
         ),
         child: Padding(
@@ -73,7 +70,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   controller: _nameController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter Username';
+                      return 'Please enter your name';
                     }
                     return null;
                   },
@@ -83,7 +80,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100),
                       borderSide: const BorderSide(),
-                    )
+                    ),
                   ),
                 ),
               ),
@@ -94,7 +91,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   controller: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter Username';
+                      return 'Please enter email';
                     }
                     return null;
                   },
@@ -104,7 +101,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
                         borderSide: const BorderSide(),
-                      )
+                      ),
                   ),
                 ),
               ),
@@ -116,7 +113,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter Username';
+                      return 'Please enter password';
                     }
                     return null;
                   },
@@ -132,13 +129,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
               const Text('Phone No'),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 65),
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
                 child: TextFormField(
                   controller: _phoneNoController,
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter Username';
+                      return 'Please enter phone number';
                     }
                     return null;
                   },
@@ -172,9 +169,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
     if (registrationKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Processing Data'),
+            content: Text('Account Created'),
             duration: Duration(
-              seconds: 1,
+              milliseconds: 1500,
             ),
           )
       );
