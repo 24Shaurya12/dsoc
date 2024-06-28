@@ -193,7 +193,7 @@ class _LoginFormState extends State<LoginForm> {
     }
     else {
       const snackBar = SnackBar(
-        content: Text('Try Again'),
+        content: Text("Email and Password don't match"),
         duration: Duration(
             seconds: 2), // Optional duration to display the SnackBar
       );
