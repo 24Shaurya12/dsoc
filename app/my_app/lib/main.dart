@@ -6,7 +6,7 @@ import 'package:my_app/pages/registration_page.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:my_app/classes/my_cart_model.dart';
-import 'package:my_app/pages/add_product.dart';
+import 'package:my_app/pages/add_product_page.dart';
 
 
 void main() => runApp(ChangeNotifierProvider(
