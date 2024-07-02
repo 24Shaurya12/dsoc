@@ -1,73 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/classes/header.dart';
-import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_app/classes/my_home_model.dart';
+import 'package:provider/provider.dart';
 
-
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class AddProductPage extends StatelessWidget {
+  const AddProductPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'signUp Page',
-        theme: ThemeData(
-          colorScheme: const ColorScheme.light(error: Color.fromARGB(255, 218, 192, 163)),
-        ),
-        home: Scaffold(
-          backgroundColor: const Color.fromARGB(255, 16, 44, 87),
-          body: ListView(
-            children: const [
-              MyHeader(),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: Text('Create Account Now!', style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
+      body: ListView(
+        children: const [
+          MyHeader(),
+          Center(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Text(
+                'Add Product',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
+                ),
               ),
-              RegistrationForm(),
-            ],
-          )
-        )
+            ),
+          ),
+          AddProductForm(),
+        ],
+      ),
     );
   }
 }
 
-
-class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({super.key});
+class AddProductForm extends StatefulWidget {
+  const AddProductForm({super.key});
 
   @override
-  State<RegistrationForm> createState() => _RegistrationFormState();
+  State<AddProductForm> createState() => _AddProductFormState();
 }
 
-class _RegistrationFormState extends State<RegistrationForm> {
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _phoneNoController = TextEditingController();
+class _AddProductFormState extends State<AddProductForm> {
+  final _titleController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _imageController = TextEditingController();
+  final _stockController = TextEditingController();
 
-  final registrationKey = GlobalKey<FormState>();
+  final addProductKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: registrationKey,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          fontWeight: FontWeight.w900,
-          fontSize: 20,
-          color: Colors.white,
-        ),
-        child: Padding(
+      key: addProductKey,
+      child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Full Name'),
+            const Text('Product Name'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
               child: TextFormField(
-                controller: _nameController,
+                controller: _titleController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
@@ -84,11 +78,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ),
               ),
             ),
-            const Text('Email'),
+            const Text('Price'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
               child: TextFormField(
-                controller: _emailController,
+                controller: _priceController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter email';
@@ -96,21 +90,20 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   return null;
                 },
                 decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    ),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 255, 250, 239),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(100),
+                    borderSide: const BorderSide(),
+                  ),
                 ),
               ),
             ),
-            const Text('Password'),
+            const Text('Image'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
               child: TextFormField(
-                controller: _passwordController,
-                obscureText: true,
+                controller: _imageController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter password';
@@ -127,11 +120,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ),
               ),
             ),
-            const Text('Phone No'),
+            const Text('Stock'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
               child: TextFormField(
-                controller: _phoneNoController,
+                controller: _stockController,
+                obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter phone number';
@@ -152,35 +146,46 @@ class _RegistrationFormState extends State<RegistrationForm> {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {signUp(registrationKey);},
+                onPressed: () {
+                  // var item = context.select<ProductsListModel, MyItemInfo>(
+                  //     (i) => i.getByIndex(index),
+                  // );
+                  // context.read<ProductsListModel>().add(item);
+
+                  if (addProductKey.currentState!.validate()) {
+
+                    final newMyItemInfo = MyItemInfo(
+                        Provider.of<ProductsListModel>(context, listen: false).myItemsInfoList.length,
+                        _titleController.text,
+                        _imageController.text,
+                        int.parse(_priceController.text),
+                        int.parse(_stockController.text),
+                    );
+
+                    _titleController.clear();
+                    _priceController.clear();
+                    _imageController.clear();
+                    _stockController.clear();
+
+                    Provider.of<ProductsListModel>(context, listen: false).add(newMyItemInfo);
+                    
+                    Navigator.pushNamed(context, '/home_page');
+                  }
+                },
                 style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
-                child: const Text('Sign Up', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
+                child: const Text('Add Product', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
               ),
             ),
           ],
         ),
       ),
-      ),
     );
   }
 
-  Future<void> signUp(GlobalKey<FormState> registrationKey) async {
-    if (registrationKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Account Created'),
-            duration: Duration(
-              milliseconds: 1500,
-            ),
-          )
-      );
-    }
 
-    String email = _emailController.text;
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("$email name", _nameController.text);
-    await prefs.setString("$email password", _passwordController.text);
-    await prefs.setInt("$email phoneNo", int.tryParse(_phoneNoController.text)!);
-  }
 }
+
+
+
+
+// onPressed: () { cart = context.read<>(); cart.add(Item)}

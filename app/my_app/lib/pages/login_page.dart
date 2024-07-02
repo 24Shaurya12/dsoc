@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/my_app_bar.dart';
+import 'package:my_app/classes/header.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_app/pages/home_page.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -18,7 +19,7 @@ class LoginPage extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 16, 44, 87),
           body: ListView(
             children: [
-              const MyAppBar(),
+              const MyHeader(),
               const Padding(
                 padding: EdgeInsets.fromLTRB(25, 20, 0, 0),
                 child: Text('Welcome Back!',  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
@@ -114,6 +115,7 @@ class _LoginFormState extends State<LoginForm> {
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
                 child: TextFormField(
                   controller: _passwordController,
+                  obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter password';
@@ -189,7 +191,7 @@ class _LoginFormState extends State<LoginForm> {
             seconds: 1), // Optional duration to display the SnackBar
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      // break;
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()),);
     }
     else {
       const snackBar = SnackBar(
