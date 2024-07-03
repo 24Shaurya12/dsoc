@@ -1,40 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/classes/header.dart';
 import 'package:my_app/classes/my_cart_model.dart';
 import 'package:provider/provider.dart';
+import 'package:my_app/pages/home_page.dart';
 
-class Cart extends StatelessWidget {
-  const Cart({super.key});
+class CartPage extends StatelessWidget {
+  const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Column(
         children: [
+          const MyHeader(),
           Expanded(
-              child: CartList(),
+            child: Consumer<MyCartListModel>(
+              builder: (context, cartList, child) {
+                return ListView.builder(
+                  itemCount: cartList.myCartItemsInfoList.length,
+                  itemBuilder: (context, index) {
+                    var cartItemInfo = cartList.getByIndex(index);
+                    return MyItem(cartItemInfo);
+                  }
+                );
+              }
+            )
           )
         ],
       ),
-    );
-  }
-}
-
-class CartList extends StatelessWidget {
-  const CartList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<MyCartModel>(
-      builder: (context, cart, child) {
-        return ListView.builder(
-          itemCount: cart.myCartItems.length,
-          itemBuilder: (context, index) => ListTile(
-            title: Text(
-              cart.myCartItems[index].title,
-            )
-          ),
-        );
-      }
     );
   }
 }

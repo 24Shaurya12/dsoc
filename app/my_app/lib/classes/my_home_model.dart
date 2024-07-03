@@ -5,9 +5,10 @@ class MyItemInfo {
   final String title;
   final String image;
   final int price;
-  final int stock;
+  late int stock;
+  late int cartQuantity;
 
-  MyItemInfo(this.index, this.title, this.image, this.price, this.stock);
+  MyItemInfo(this.index, this.title, this.image, this.price, this.stock, this.cartQuantity);
 
   @override
   int get hashCode => index;
@@ -20,10 +21,7 @@ class MyItemInfo {
 }
 
 
-class ProductsListModel extends ChangeNotifier {
-
-  // late ProductsListModel _home;
-  // final List<int> _itemIndexes = [];
+class MyProductsListModel extends ChangeNotifier {
 
   final List<MyItemInfo> _myItemsInfoList = [];
 

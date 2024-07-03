@@ -125,7 +125,6 @@ class _AddProductFormState extends State<AddProductForm> {
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
               child: TextFormField(
                 controller: _stockController,
-                obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter phone number';
@@ -147,19 +146,15 @@ class _AddProductFormState extends State<AddProductForm> {
               height: 60,
               child: ElevatedButton(
                 onPressed: () {
-                  // var item = context.select<ProductsListModel, MyItemInfo>(
-                  //     (i) => i.getByIndex(index),
-                  // );
-                  // context.read<ProductsListModel>().add(item);
-
                   if (addProductKey.currentState!.validate()) {
 
-                    final newMyItemInfo = MyItemInfo(
-                        Provider.of<ProductsListModel>(context, listen: false).myItemsInfoList.length,
-                        _titleController.text,
-                        _imageController.text,
-                        int.parse(_priceController.text),
-                        int.parse(_stockController.text),
+                    final newItemInfo = MyItemInfo(
+                      Provider.of<MyProductsListModel>(context, listen: false).myItemsInfoList.length,
+                      _titleController.text,
+                      _imageController.text,
+                      int.parse(_priceController.text),
+                      int.parse(_stockController.text),
+                      0,
                     );
 
                     _titleController.clear();
@@ -167,7 +162,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     _imageController.clear();
                     _stockController.clear();
 
-                    Provider.of<ProductsListModel>(context, listen: false).add(newMyItemInfo);
+                    Provider.of<MyProductsListModel>(context, listen: false).add(newItemInfo);
                     
                     Navigator.pushNamed(context, '/home_page');
                   }
@@ -181,11 +176,4 @@ class _AddProductFormState extends State<AddProductForm> {
       ),
     );
   }
-
-
 }
-
-
-
-
-// onPressed: () { cart = context.read<>(); cart.add(Item)}
