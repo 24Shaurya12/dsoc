@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/classes/header.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_app/pages/home_page.dart';
+import 'package:my_app/classes/my_text_field.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -51,7 +51,8 @@ class LoginPage extends StatelessWidget {
                   )
                 ],
               ),
-            ),)
+            ),
+          )
         ],
       ),
     );
@@ -65,6 +66,7 @@ class LoginForm extends StatefulWidget {
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
+
 
 class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
@@ -86,70 +88,37 @@ class _LoginFormState extends State<LoginForm> {
               const Text('Email',textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-                child: TextFormField(
-                  controller: _emailController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter email';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 255, 250, 239),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(100),
-                        borderSide: const BorderSide(),
-                      )
-                  ),
-                ),
-                               ),
+                child: MyTextFormField(_emailController, "Please enter email")
+              ),
               const Text('Password', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white,),),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-                child: TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter password';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 255, 250, 239),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(100),
-                        borderSide: const BorderSide(),
-                      )
-                  ),
-                ),
+                child: MyTextFormField(_passwordController, "Please enter password")
               ),
               Row(
-              children: [
-                SizedBox(
-                  height: 16,
-                  width: 16,
-                  child: ColoredBox(
-                    color: Colors.white,
-                    child: Checkbox(
-                      activeColor: Colors.green,
-                      value: rememberMe,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          rememberMe = value!;
-                        });
-                      }
+                children: [
+                  SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: ColoredBox(
+                      color: Colors.white,
+                      child: Checkbox(
+                        activeColor: Colors.green,
+                        value: rememberMe,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            rememberMe = value!;
+                          });
+                        }
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10,),
-                const Text('Remember me', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,)),
-                const SizedBox(width: 100,),
-                const Text('Forgot password', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,)),
-              ]
-                              ),
+                  const SizedBox(width: 10,),
+                  const Text('Remember me', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,)),
+                  const SizedBox(width: 100,),
+                  const Text('Forgot password', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,)),
+                ]
+              ),
               const SizedBox(height: 40,),
               SizedBox(
                width: double.infinity,
@@ -177,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
       const snackBar = SnackBar(
         content: Text('Login Successful'),
         duration: Duration(
-            seconds: 1), // Optional duration to display the SnackBar
+            seconds: 1),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.pushNamed(context, '/home_page');
@@ -186,10 +155,9 @@ class _LoginFormState extends State<LoginForm> {
       const snackBar = SnackBar(
         content: Text("Email and Password don't match"),
         duration: Duration(
-            seconds: 2), // Optional duration to display the SnackBar
+            seconds: 2),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-  // }
   }
 }

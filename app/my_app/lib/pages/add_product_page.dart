@@ -9,6 +9,8 @@ import 'dart:async';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_app/classes/my_text_field.dart';
+
 
 class AddProductPage extends StatelessWidget {
   const AddProductPage({super.key});
@@ -22,7 +24,7 @@ class AddProductPage extends StatelessWidget {
           const MyHeader(),
           const Center(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Text(
                 'Add Product',
                 style: TextStyle(
@@ -36,12 +38,19 @@ class AddProductPage extends StatelessWidget {
           const AddProductForm(),
           Padding(
             padding: const EdgeInsets.fromLTRB(60, 10, 60, 0),
-            child: ElevatedButton(onPressed: () {Navigator.pushNamed(context, '/home_page');}, child: const Text('Go Back to Products Page')))
+            child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/home_page');
+                },
+                child: const Text('Go Back to Products Page')
+            )
+          )
         ],
       ),
     );
   }
 }
+
 
 class AddProductForm extends StatefulWidget {
   const AddProductForm({super.key});
@@ -49,6 +58,7 @@ class AddProductForm extends StatefulWidget {
   @override
   State<AddProductForm> createState() => _AddProductFormState();
 }
+
 
 class _AddProductFormState extends State<AddProductForm> {
   final _titleController = TextEditingController();
@@ -149,26 +159,30 @@ class _AddProductFormState extends State<AddProductForm> {
                   ),
                   SizedBox(
                     width: 180,
-                    child: TextFormField(
-                      controller: _barcodeController,
-                      textAlign: TextAlign.center,
-                      validator: (value) {
-                        if ((value == null || value.isEmpty) && product?.barcode == null) {
-                          return 'Please enter barcode';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        filled: true,
-                        hintText: 'Enter Manually',
-                        hintStyle: const TextStyle(fontSize: 15),
-                        fillColor: const Color.fromARGB(255, 255, 250, 239),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                          borderSide: const BorderSide(),
-                        ),
-                      ),
-                    ),
+                    child: MyTextFormField(_barcodeController, "Please enter barcode"),
+
+                    // if the above gives an error, uncomment the below lines and remove MyTextFormField
+                    // MyTextFormField doesn't take product?.barcode == null into consideration when validating
+                    // child: TextFormField(
+                    //   controller: _barcodeController,
+                    //   textAlign: TextAlign.center,
+                    //   validator: (value) {
+                    //     if ((value == null || value.isEmpty) && product?.barcode == null) {
+                    //       return 'Please enter barcode';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   decoration: InputDecoration(
+                    //     filled: true,
+                    //     hintText: 'Enter Manually',
+                    //     hintStyle: const TextStyle(fontSize: 15),
+                    //     fillColor: const Color.fromARGB(255, 255, 250, 239),
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(100),
+                    //       borderSide: const BorderSide(),
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 ],
               ),
@@ -176,86 +190,22 @@ class _AddProductFormState extends State<AddProductForm> {
             const Text('Product Name'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _titleController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 255, 250, 239),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide: const BorderSide(),
-                  ),
-                ),
-              ),
+              child: MyTextFormField(_titleController, "Please enter Product Name")
             ),
             const Text('Price'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _priceController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter email';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 255, 250, 239),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide: const BorderSide(),
-                  ),
-                ),
-              ),
+              child: MyTextFormField(_priceController, "Please enter Price"),
             ),
             const Text('Stock'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _stockController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter phone number';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    )
-                ),
-              ),
+              child: MyTextFormField(_stockController, "Please Enter Stock")
             ),
             const Text('Weight'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _weightController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter phone number';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    )
-                ),
-              ),
+              child: MyTextFormField(_weightController, "Please enter weight")
             ),
             const Text('Image'),
             Padding(
@@ -271,7 +221,6 @@ class _AddProductFormState extends State<AddProductForm> {
                     child: const Text('Pick Image', style: TextStyle(fontSize: 18, color: Colors.black),),
                   ),
                   const Expanded(child: SizedBox()),
-                  // if (image == null) const Text('Image Preview') else
                   SizedBox(width: 80, child: image),
                   const SizedBox(width: 70,),
                 ]
@@ -313,6 +262,7 @@ class _AddProductFormState extends State<AddProductForm> {
       ),
     );
   }
+
 
   Future pickImage() async {
     var cameraPermission = await Permission.camera.request();
@@ -364,7 +314,6 @@ class _AddProductFormState extends State<AddProductForm> {
         )
       );
     }
-
     return null;
   }
 

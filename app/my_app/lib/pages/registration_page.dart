@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/classes/header.dart';
+import 'package:my_app/classes/my_text_field.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,6 +35,7 @@ class RegistrationForm extends StatefulWidget {
   State<RegistrationForm> createState() => _RegistrationFormState();
 }
 
+
 class _RegistrationFormState extends State<RegistrationForm> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -60,87 +62,22 @@ class _RegistrationFormState extends State<RegistrationForm> {
             const Text('Full Name'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _nameController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 255, 250, 239),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    borderSide: const BorderSide(),
-                  ),
-                ),
-              ),
+              child: MyTextFormField(_nameController, "Please enter a name")
             ),
             const Text('Email'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _emailController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter email';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    ),
-                ),
-              ),
+              child: MyTextFormField(_emailController, "Please enter email")
             ),
             const Text('Password'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter password';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    )
-                ),
-              ),
+              child: MyTextFormField(_passwordController, "Please enter password")
             ),
             const Text('Phone No'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _phoneNoController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter phone number';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 250, 239),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      borderSide: const BorderSide(),
-                    )
-                ),
-              ),
+              child: MyTextFormField(_phoneNoController, "Please enter phone number")
             ),
             SizedBox(
               width: double.infinity,
@@ -170,9 +107,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
           )
       );
-      print('start');
       Navigator.pushNamed(context, '/home_page');
-      print('end');
     }
 
     String email = _emailController.text;
