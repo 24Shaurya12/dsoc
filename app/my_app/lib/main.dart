@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:my_app/classes/my_cart_model.dart';
 import 'package:my_app/pages/add_product_page.dart';
 import 'package:my_app/pages/cart_page.dart';
+import 'package:my_app/pages/barcode_page.dart';
 
 
 void main() => runApp(MultiProvider(
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           )
       ),
       color: Colors.green,
-      home: const HomePage(),
+      home: const AddProductPage(),
     );
   }
 }

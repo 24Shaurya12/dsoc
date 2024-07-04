@@ -13,12 +13,16 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           const MyHeader(),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/add_product_page');},
-              child: const Text('Add Product')
+          Padding(
+            padding: const EdgeInsets.fromLTRB(60, 40, 60, 0),
+            child: Row(
+              children: [
+                ElevatedButton(onPressed: () {Navigator.pushNamed(context, '/add_product_page');}, child: const Text('Add Product')),
+                const Expanded(child: SizedBox(),),
+                ElevatedButton(onPressed: () {Navigator.pushNamed(context, '/cart_page');}, child: const Text('Cart')),
+              ]
+            ),
           ),
-          ElevatedButton(onPressed: () {Navigator.pushNamed(context, '/cart_page');}, child: const Text('Cart')),
           Expanded(
             child: Consumer<MyProductsListModel>(
               builder: (context, productList, child) {
@@ -46,29 +50,6 @@ class MyItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // var myItemInfo = context.select<ProductsListModel, MyItemInfo>(
-    //     (homePage) => homePage.getByIndex(index),
-    // );
-
-    // String title = '';
-    // String image = 'assets/products/oreo.jpg';
-    // int stock = 0;
-    // int stock = myItemInfo.stock;
-    // String stockMsg = 'No stock';
-
-    // print(tempStock[1]['title']);
-    // print(tempStock[1]['stock']);
-    // print(tempStock[1]['image']);
-
-
-    // title = tempStock[index]['title'];
-    // stock = tempStock[index]['stock'];
-    // index<2 ? image = tempStock[index]['image'] : ();
-
-    // print('Start');
-
-    // print(image);
-
     String stockMsg = 'No stock';
 
     if (itemInfo.stock != 0) {
@@ -78,8 +59,10 @@ class MyItem extends StatelessWidget {
     var isInCart = Provider.of<MyCartListModel>(context, listen: true).isInCart(itemInfo);
 
     return ListTile(
-      leading: Text(itemInfo.image),
-      title: Text(itemInfo.title),
+      leading: SizedBox(
+          width: 40,
+          child: itemInfo.image),
+      title: Text(itemInfo.productName),
       subtitle: Text('Price = ${itemInfo.price}, $stockMsg'),
       trailing: isInCart ? ChangeQuantityButton(itemInfo) : AddItemButton(itemInfo),
     );
@@ -94,7 +77,7 @@ class AddItemButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 100,
+      width: 90,
       child: ElevatedButton(
         onPressed: () {
           Provider.of<MyCartListModel>(context, listen: false).addToCart(itemInfo);
@@ -114,7 +97,6 @@ class ChangeQuantityButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var itemStock = itemInfo.stock;
-    var itemCartQuantity = itemInfo.cartQuantity;
     return SizedBox(
       width: 100,
       child: Consumer<MyCartListModel> (

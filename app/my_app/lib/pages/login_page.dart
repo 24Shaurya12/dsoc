@@ -10,56 +10,50 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Login Page',
-        theme: ThemeData(
-          colorScheme: const ColorScheme.light(error: Color.fromARGB(255, 218, 192, 163)),
-        ),
-        home: Scaffold(
-          backgroundColor: const Color.fromARGB(255, 16, 44, 87),
-          body: ListView(
-            children: [
-              const MyHeader(),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(25, 20, 0, 0),
-                child: Text('Welcome Back!',  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                child: Text('Login to continue',textAlign: TextAlign.left, style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),)),
-              const LoginForm(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                child: DefaultTextStyle(
-                  style: const TextStyle(color: Colors.white, fontSize: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account?"),
-                      const SizedBox(width: 10,),
-                      Container(
-                        decoration: const BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Color.fromARGB(255, 218, 192, 163), width: 3))
+    // colorScheme: const ColorScheme.light(error: Color.fromARGB(255, 218, 192, 163)),
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
+      body: ListView(
+        children: [
+          const MyHeader(),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(25, 20, 0, 0),
+            child: Text('Welcome Back!',  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+            child: Text('Login to continue',textAlign: TextAlign.left, style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),)),
+          const LoginForm(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+            child: DefaultTextStyle(
+              style: const TextStyle(color: Colors.white, fontSize: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Don't have an account?"),
+                  const SizedBox(width: 10,),
+                  Container(
+                    decoration: const BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Color.fromARGB(255, 218, 192, 163), width: 3))
+                    ),
+                    child: GestureDetector(
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 218, 192, 163),
+                            fontWeight: FontWeight.w600,
                         ),
-                        child: GestureDetector(
-                          child: const Text(
-                            'Sign Up',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 218, 192, 163),
-                                fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.pushNamed(context, '/registration_page');
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),)
-            ],
-          ),
-
-        )
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/registration_page');
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),)
+        ],
+      ),
     );
   }
 }
@@ -177,11 +171,6 @@ class _LoginFormState extends State<LoginForm> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // print(prefs.getString("email"));
-    // print(_emailController.text);
-    // print(prefs.getString("password"));
-    // print(_passwordController.text);
-
     String email = _emailController.text;
 
     if (prefs.getString("$email password") == _passwordController.text && _passwordController.text != '') {
@@ -191,7 +180,7 @@ class _LoginFormState extends State<LoginForm> {
             seconds: 1), // Optional duration to display the SnackBar
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()),);
+      Navigator.pushNamed(context, '/home_page');
     }
     else {
       const snackBar = SnackBar(

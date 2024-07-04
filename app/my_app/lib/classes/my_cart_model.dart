@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/classes/my_home_model.dart';
+import 'package:provider/provider.dart';
 
 class MyCartListModel extends ChangeNotifier {
 
   // late MyProductsListModel _home;
 
-  final List<MyItemInfo> _cartMyItemsInfoList = [];
+  final List<MyItemInfo> _myCartItemsInfoList = [];
 
   // MyProductsListModel get home => _home;
 
@@ -14,43 +15,55 @@ class MyCartListModel extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  List<MyItemInfo> get myCartItemsInfoList => _cartMyItemsInfoList;
+  List<MyItemInfo> get myCartItemsInfoList => _myCartItemsInfoList;
 
   bool isInCart(MyItemInfo myItemInfo) {
-    return _cartMyItemsInfoList.contains(myItemInfo);
+    return _myCartItemsInfoList.contains(myItemInfo);
   }
 
   int getQuantity(MyItemInfo myItemInfo) {
-    return _cartMyItemsInfoList[myItemInfo.index].cartQuantity;
+    return myItemInfo.cartQuantity;
   }
 
   void addToCart(MyItemInfo myItemInfo) {
-    _cartMyItemsInfoList.contains(myItemInfo) ? () : _cartMyItemsInfoList.add(myItemInfo);
+    _myCartItemsInfoList.contains(myItemInfo) ? () : _myCartItemsInfoList.add(myItemInfo);
     addQuantity(myItemInfo);
+    print("Item added");
+    print(myItemInfo.index);
+    print(myItemInfo.productName);
+    getLength();
     notifyListeners();
   }
 
   void addQuantity(MyItemInfo myItemInfo) {
-    _cartMyItemsInfoList[myItemInfo.index].cartQuantity++;
-    _cartMyItemsInfoList[myItemInfo.index].stock--;
+    myItemInfo.cartQuantity++;
+    myItemInfo.stock--;
     notifyListeners();
   }
 
   void removeQuantity(MyItemInfo myItemInfo) {
-    _cartMyItemsInfoList[myItemInfo.index].cartQuantity--;
-    _cartMyItemsInfoList[myItemInfo.index].stock++;
-    if(_cartMyItemsInfoList[myItemInfo.index].cartQuantity == 0) {
+    myItemInfo.cartQuantity--;
+    myItemInfo.stock++;
+    if(myItemInfo.cartQuantity == 0) {
       removeFromCart(myItemInfo);
     }
     notifyListeners();
   }
 
   void removeFromCart(MyItemInfo myItemInfo) {
-    _cartMyItemsInfoList.remove(myItemInfo);
+    _myCartItemsInfoList.remove(myItemInfo);
+    print("Item removed");
+    print(myItemInfo.index);
+    print(myItemInfo.productName);
+    getLength();
     notifyListeners();
   }
 
-  MyItemInfo getByIndex(int index) => _cartMyItemsInfoList[index];
+  void getLength() {
+    print(_myCartItemsInfoList.length);
+  }
+
+  MyItemInfo getByIndex(int index) => _myCartItemsInfoList[index];
 
   int get totalPrice => myCartItemsInfoList.fold(0, (total, current) => total + current.price);
 }

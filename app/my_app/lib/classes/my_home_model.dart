@@ -1,14 +1,18 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class MyItemInfo {
   final int index;
-  final String title;
-  final String image;
+  final String barcode;
+  final String productName;
+  final Image image;
+  final String weight;
   final int price;
   late int stock;
   late int cartQuantity;
 
-  MyItemInfo(this.index, this.title, this.image, this.price, this.stock, this.cartQuantity);
+
+  MyItemInfo(this.index, this.barcode, this.productName, this.image, this.weight, this.price, this.stock, this.cartQuantity);
 
   @override
   int get hashCode => index;

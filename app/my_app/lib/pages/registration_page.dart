@@ -9,25 +9,19 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'signUp Page',
-        theme: ThemeData(
-          colorScheme: const ColorScheme.light(error: Color.fromARGB(255, 218, 192, 163)),
-        ),
-        home: Scaffold(
-          backgroundColor: const Color.fromARGB(255, 16, 44, 87),
-          body: ListView(
-            children: const [
-              MyHeader(),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: Text('Create Account Now!', style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
-              ),
-              RegistrationForm(),
-            ],
-          )
-        )
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
+      body: ListView(
+        children: const [
+          MyHeader(),
+          Center(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Text('Create Account Now!', style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
+          ),
+          RegistrationForm(),
+        ],
+      )
     );
   }
 }
@@ -152,7 +146,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {signUp(registrationKey);},
+                onPressed: () {
+                  signUp(registrationKey);
+                },
                 style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
                 child: const Text('Sign Up', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
               ),
@@ -174,13 +170,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
           )
       );
+      print('start');
+      Navigator.pushNamed(context, '/home_page');
+      print('end');
     }
 
     String email = _emailController.text;
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("$email name", _nameController.text);
-    await prefs.setString("$email password", _passwordController.text);
-    await prefs.setInt("$email phoneNo", int.tryParse(_phoneNoController.text)!);
+    SharedPreferences userInfo = await SharedPreferences.getInstance();
+    await userInfo.setString("$email name", _nameController.text);
+    await userInfo.setString("$email password", _passwordController.text);
+    await userInfo.setInt("$email phoneNo", int.tryParse(_phoneNoController.text)!);
   }
 }
