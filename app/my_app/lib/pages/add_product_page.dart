@@ -1,15 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_app/classes/header.dart';
-import 'package:my_app/classes/my_home_model.dart';
+import 'package:my_app/custom_classes/my_app_bar.dart';
+import 'package:my_app/models/my_home_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_app/classes/my_text_field.dart';
+import 'package:my_app/custom_classes/my_text_field.dart';
+import 'package:my_app/custom_classes/my_navigation_drawer.dart';
 
 
 class AddProductPage extends StatelessWidget {
@@ -18,10 +19,11 @@ class AddProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const MyAppBar(),
+      endDrawer: const MyEndDrawer(),
       backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       body: ListView(
         children: [
-          const MyHeader(),
           const Center(
             child: Padding(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -39,12 +41,14 @@ class AddProductPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(60, 10, 60, 0),
             child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/home_page');
-                },
-                child: const Text('Go Back to Products Page')
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
+              onPressed: () {
+                Navigator.pushNamed(context, '/home_page');
+              },
+              child: const Text('Go Back to Products Page', style: TextStyle(color: Colors.black),)
             )
-          )
+          ),
+          const SizedBox(height: 20,)
         ],
       ),
     );
@@ -91,64 +95,62 @@ class _AddProductFormState extends State<AddProductForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                      onPressed: () async {
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
+                    onPressed: () async {
 
-                        SharedPreferences itemInfoSharePreferences = await SharedPreferences.getInstance();
+                      SharedPreferences itemInfoSharePreferences = await SharedPreferences.getInstance();
 
-                        itemInfoSharePreferences.setString("barcode", "");
-                        itemInfoSharePreferences.setString("weight", "");
-                        itemInfoSharePreferences.setString("productName", "");
-                        itemInfoSharePreferences.setString("imageURL", "");
-                        image = const Image(image: AssetImage("assets/no_image.jpg"));
+                      itemInfoSharePreferences.setString("barcode", "");
+                      itemInfoSharePreferences.setString("weight", "");
+                      itemInfoSharePreferences.setString("productName", "");
+                      itemInfoSharePreferences.setString("imageURL", "");
+                      image = const Image(image: AssetImage("assets/no_image.jpg"));
 
-                        String? barcodeResult = await barcodeScanner();
-                        if (barcodeResult != null) {
+                      String? barcodeResult = await barcodeScanner();
+                      if (barcodeResult != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please wait while we fetch data'),
+                            duration: Duration(
+                              milliseconds: 2000,
+                            ),
+                          )
+                        );
+
+                        await getProductInfo(barcodeResult);
+
+                        if (itemInfoSharePreferences.getString('productName') == "") {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Please wait while we fetch data'),
+                              content: Text('Sorry, no data found'),
                               duration: Duration(
                                 milliseconds: 2500,
                               ),
                             )
                           );
-
-                          await getProductInfo(barcodeResult);
-
-                          if (itemInfoSharePreferences.getString('productName') == "") {
-                            print("Ye Dekh");
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Sorry, no data found'),
-                                duration: Duration(
-                                  milliseconds: 2500,
-                                ),
-                              )
-                            );
-                          }
                         }
-                        else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Barcode couldn't be scanned"),
-                                duration: Duration(
-                                  milliseconds: 1500,
-                                ),
-                              )
-                          );
-                        }
+                      }
+                      else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Barcode couldn't be scanned"),
+                              duration: Duration(
+                                milliseconds: 1500,
+                              ),
+                            )
+                        );
+                      }
 
-                        print("Start ${itemInfoSharePreferences.getString("barcode")}, ${itemInfoSharePreferences.getString("imageURL")},");
-                        setState(() {
-                          _barcodeController.text = itemInfoSharePreferences.getString("barcode") ?? "";
-                          _weightController.text = itemInfoSharePreferences.getString("weight") ?? "";
-                          _titleController.text = itemInfoSharePreferences.getString('productName') ?? "";
-                          if (itemInfoSharePreferences.getString("imageURL") != null && itemInfoSharePreferences.getString("imageURL") != "") {
-                            image = Image.network(itemInfoSharePreferences.getString("imageURL")!);
-                          }
-                        });
-                        print("End ${_barcodeController.text}, ");
-                      },
-                      child: const Text("Scan Barcode")
+                      setState(() {
+                        _barcodeController.text = itemInfoSharePreferences.getString("barcode") ?? "";
+                        _weightController.text = itemInfoSharePreferences.getString("weight") ?? "";
+                        _titleController.text = itemInfoSharePreferences.getString('productName') ?? "";
+                        if (itemInfoSharePreferences.getString("imageURL") != null && itemInfoSharePreferences.getString("imageURL") != "") {
+                          image = Image.network(itemInfoSharePreferences.getString("imageURL")!);
+                        }
+                      });
+                    },
+                    child: const Text("Scan Barcode", style: TextStyle(color: Colors.black),)
                   ),
                   const Expanded(
                       child: SizedBox(
@@ -195,17 +197,17 @@ class _AddProductFormState extends State<AddProductForm> {
             const Text('Price'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: MyTextFormField(_priceController, "Please enter Price"),
+              child: MyTextFormField(_priceController, "Please enter Price of the product"),
             ),
             const Text('Stock'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: MyTextFormField(_stockController, "Please Enter Stock")
+              child: MyTextFormField(_stockController, "Please enter Stock of the product")
             ),
             const Text('Weight'),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: MyTextFormField(_weightController, "Please enter weight")
+              child: MyTextFormField(_weightController, "Please enter Weight of the product")
             ),
             const Text('Image'),
             Padding(
@@ -214,7 +216,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 children: [
                   const SizedBox(width: 40,),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 255, 250, 239)),
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
                     onPressed: () {
                       pickImage();
                     },
@@ -268,8 +270,9 @@ class _AddProductFormState extends State<AddProductForm> {
     var cameraPermission = await Permission.camera.request();
     if (cameraPermission.isGranted) {
       final returnedImage = await ImagePicker().pickImage(source: ImageSource.camera);
-      if(returnedImage == null)
+      if(returnedImage == null) {
         return;
+      }
       else {
         setState(() {
           imageFileLocation = File(returnedImage.path);
@@ -332,7 +335,7 @@ class _AddProductFormState extends State<AddProductForm> {
       SharedPreferences itemInfoSharedPreferences = await SharedPreferences.getInstance();
       await itemInfoSharedPreferences.setString("productName", product.productName ?? "");
       await itemInfoSharedPreferences.setString("weight", product.quantity ?? "");
-      await itemInfoSharedPreferences.setString("imageURL", product.imageFrontSmallUrl.toString() ?? "");
+      await itemInfoSharedPreferences.setString("imageURL", product.imageFrontSmallUrl ?? "");
     }
   }
 }

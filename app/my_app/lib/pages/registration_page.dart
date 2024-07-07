@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/classes/header.dart';
-import 'package:my_app/classes/my_text_field.dart';
+import 'package:my_app/custom_classes/my_app_bar.dart';
+import 'package:my_app/custom_classes/my_text_field.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_app/custom_classes/my_navigation_drawer.dart';
 
+import '../models/my_user_model.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -11,22 +14,27 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
-      body: ListView(
-        children: const [
-          MyHeader(),
-          Center(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-              child: Text('Create Account Now!', style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
-          ),
-          RegistrationForm(),
-        ],
-      )
-    );
+        appBar: const MyAppBar(),
+        endDrawer: const MyEndDrawer(),
+        backgroundColor: const Color.fromARGB(255, 16, 44, 87),
+        body: ListView(
+          children: const [
+            Center(
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Text(
+                    'Create Account Now!',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ),
+            RegistrationForm(),
+          ],
+        ));
   }
 }
-
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({super.key});
@@ -34,7 +42,6 @@ class RegistrationForm extends StatefulWidget {
   @override
   State<RegistrationForm> createState() => _RegistrationFormState();
 }
-
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final _nameController = TextEditingController();
@@ -55,66 +62,76 @@ class _RegistrationFormState extends State<RegistrationForm> {
           color: Colors.white,
         ),
         child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Full Name'),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: MyTextFormField(_nameController, "Please enter a name")
-            ),
-            const Text('Email'),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: MyTextFormField(_emailController, "Please enter email")
-            ),
-            const Text('Password'),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: MyTextFormField(_passwordController, "Please enter password")
-            ),
-            const Text('Phone No'),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: MyTextFormField(_phoneNoController, "Please enter phone number")
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  signUp(registrationKey);
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
-                child: const Text('Sign Up', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 25)),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Full Name'),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+                  child:
+                      MyTextFormField(_nameController, "Please enter a name")),
+              const Text('Email'),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+                  child:
+                      MyTextFormField(_emailController, "Please enter email")),
+              const Text('Password'),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+                  child: MyTextFormField(
+                      _passwordController, "Please enter password", obscureText: true,)),
+              const Text('Phone No'),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+                  child: MyTextFormField(
+                      _phoneNoController, "Please enter phone number")),
+              SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () {
+                    signUp(registrationKey);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color.fromARGB(255, 218, 192, 163)),
+                  child: const Text('Sign Up',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 25)),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
 
   Future<void> signUp(GlobalKey<FormState> registrationKey) async {
     if (registrationKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Account Created'),
-            duration: Duration(
-              milliseconds: 1500,
-            ),
-          )
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Account Created'),
+        duration: Duration(
+          milliseconds: 1500,
+        ),
+      ));
       Navigator.pushNamed(context, '/home_page');
     }
 
-    String email = _emailController.text;
+    Provider.of<MyUserInfoModel>(context, listen: false).signUp(
+        _nameController.text,
+        _emailController.text,
+        _passwordController.text,
+        int.parse(_phoneNoController.text));
 
     SharedPreferences userInfo = await SharedPreferences.getInstance();
+    String email = _emailController.text;
     await userInfo.setString("$email name", _nameController.text);
     await userInfo.setString("$email password", _passwordController.text);
-    await userInfo.setInt("$email phoneNo", int.tryParse(_phoneNoController.text)!);
+    await userInfo.setInt(
+        "$email phoneNo", int.tryParse(_phoneNoController.text)!);
   }
 }

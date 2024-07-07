@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:my_app/classes/header.dart';
+import 'package:my_app/custom_classes/my_app_bar.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
+import 'package:my_app/custom_classes/my_navigation_drawer.dart';
 
 class BarcodePage extends StatefulWidget {
   const BarcodePage({super.key});
@@ -21,9 +22,10 @@ class BarcodePageStatus extends State<BarcodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const MyAppBar(),
+      endDrawer: const MyEndDrawer(),
       body: Column(
         children: [
-          const MyHeader(),
           ElevatedButton(
               onPressed: () async {
                 String barcodeResult = await barcodeScanner();

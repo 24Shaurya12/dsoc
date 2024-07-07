@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/classes/header.dart';
-import 'package:my_app/classes/my_cart_model.dart';
+import 'package:my_app/custom_classes/my_app_bar.dart';
+import 'package:my_app/models/my_cart_model.dart';
 import 'package:provider/provider.dart';
 import 'package:my_app/pages/home_page.dart';
+import 'package:my_app/custom_classes/my_navigation_drawer.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -10,9 +11,11 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const MyAppBar(),
+      endDrawer: const MyEndDrawer(),
+      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       body: Column(
         children: [
-          const MyHeader(),
           Expanded(
             child: Consumer<MyCartListModel>(
               builder: (context, cartList, child) {

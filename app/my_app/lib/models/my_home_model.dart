@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 class MyItemInfo {
@@ -18,8 +17,7 @@ class MyItemInfo {
   int get hashCode => index;
 
   @override
-  bool operator ==(Object other) {
-    // TODO: implement ==
+  bool operator == (Object other) {
     return other is MyItemInfo && other.index == index;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/classes/my_home_model.dart';
-import 'package:provider/provider.dart';
+import 'package:my_app/models/my_home_model.dart';
 
 class MyCartListModel extends ChangeNotifier {
 
@@ -28,9 +27,6 @@ class MyCartListModel extends ChangeNotifier {
   void addToCart(MyItemInfo myItemInfo) {
     _myCartItemsInfoList.contains(myItemInfo) ? () : _myCartItemsInfoList.add(myItemInfo);
     addQuantity(myItemInfo);
-    print("Item added");
-    print(myItemInfo.index);
-    print(myItemInfo.productName);
     getLength();
     notifyListeners();
   }
@@ -52,15 +48,11 @@ class MyCartListModel extends ChangeNotifier {
 
   void removeFromCart(MyItemInfo myItemInfo) {
     _myCartItemsInfoList.remove(myItemInfo);
-    print("Item removed");
-    print(myItemInfo.index);
-    print(myItemInfo.productName);
     getLength();
     notifyListeners();
   }
 
   void getLength() {
-    print(_myCartItemsInfoList.length);
   }
 
   MyItemInfo getByIndex(int index) => _myCartItemsInfoList[index];
