@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/my_user_model.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ class ProfilePage extends StatelessWidget {
       endDrawer: const MyEndDrawer(),
       body: Consumer<MyUserInfoModel>(
         builder: (context, userInfo, child) {
+          print("rebuild hua");
           return DefaultTextStyle(
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.white, fontSize: 20),
@@ -43,8 +45,9 @@ class ProfilePage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color.fromARGB(255, 218, 192, 163)),
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.pushNamed(context, '/welcome_page');
+                            userInfo.logout();
                           },
                           child: const Text(
                             'Logout',

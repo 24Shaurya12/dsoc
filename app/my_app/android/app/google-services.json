@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "583682512061",
+    "firebase_url": "https://dsoc-pos-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "dsoc-pos-app",
+    "storage_bucket": "dsoc-pos-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583682512061:android:704b8fc52c61aef2ef93d4",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpTQgnrUcrRUnBNlbGgAqhFQW0VfTcaG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583682512061:android:ca26a8f0c664b306ef93d4",
+        "android_client_info": {
+          "package_name": "your.app.package.name"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpTQgnrUcrRUnBNlbGgAqhFQW0VfTcaG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

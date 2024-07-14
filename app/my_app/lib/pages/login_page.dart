@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
 import 'package:my_app/models/my_user_model.dart';
@@ -126,7 +127,10 @@ class _LoginFormState extends State<LoginForm> {
               Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
                   child: MyTextFormField(
-                      _passwordController, "Please enter password", obscureText: true,)),
+                    _passwordController,
+                    "Please enter password",
+                    obscureText: true,
+                  )),
               Row(children: [
                 SizedBox(
                   height: 16,
@@ -185,30 +189,68 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  // Future<void> login(GlobalKey<FormState> loginKey) async {
+  //   loginKey.currentState!.validate();
+  //
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  //   String email = _emailController.text;
+  //
+  //   if (prefs.getString("$email password") == _passwordController.text &&
+  //       _passwordController.text != '') {
+  //     const snackBar = SnackBar(
+  //       content: Text('Login Successful'),
+  //       duration: Duration(seconds: 1),
+  //     );
+  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //     Navigator.pushNamed(context, '/home_page');
+  //     Provider.of<MyUserInfoModel>(context, listen: false)
+  //         .login(_emailController.text, _passwordController.text);
+  //   }
+  //   else {
+  //     const snackBar = SnackBar(
+  //       content: Text("Email and Password don't match"),
+  //       duration: Duration(seconds: 2),
+  //     );
+  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //   }
+  // }
+
   Future<void> login(GlobalKey<FormState> loginKey) async {
-    loginKey.currentState!.validate();
+    String scaffoldMSgContent = '';
+    if (loginKey.currentState!.validate()) {
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+        scaffoldMSgContent = 'Login Successful';
+        Navigator.pushNamed(context, '/home_page');
+        Provider.of<MyUserInfoModel>(context, listen: false)
+            .login(_emailController.text, _passwordController.text);
 
-    String email = _emailController.text;
-
-    if (prefs.getString("$email password") == _passwordController.text &&
-        _passwordController.text != '') {
-      const snackBar = SnackBar(
-        content: Text('Login Successful'),
-        duration: Duration(seconds: 1),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Navigator.pushNamed(context, '/home_page');
-      Provider.of<MyUserInfoModel>(context, listen: false)
-          .login(_emailController.text, _passwordController.text);
-    }
-    else {
-      const snackBar = SnackBar(
-        content: Text("Email and Password don't match"),
-        duration: Duration(seconds: 2),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } on FirebaseAuthException catch (e) {
+        print('Ye Dekh ${e.code}');
+        if (e.code == 'user-not-found') {
+          scaffoldMSgContent = 'No user found for that email.';
+        } else if (e.code == 'invalid-credential') {
+          scaffoldMSgContent = "User and Password don't match";
+        } else if (e.code == 'invalid-email') {
+          scaffoldMSgContent = 'The email provided is invalid.';
+        } else if (e.code == 'too-many-requests') {
+          scaffoldMSgContent = 'Too many requests';
+        }
+      } catch (e) {
+        scaffoldMSgContent = e.toString();
+      }
+      print(scaffoldMSgContent);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(scaffoldMSgContent),
+        duration: const Duration(
+          milliseconds: 1500,
+        ),
+      ));
     }
   }
 }

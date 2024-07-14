@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
 import 'package:my_app/custom_classes/my_text_field.dart';
@@ -80,7 +81,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
               Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
                   child: MyTextFormField(
-                      _passwordController, "Please enter password", obscureText: true,)),
+                    _passwordController,
+                    "Please enter password",
+                    obscureText: true,
+                  )),
               const Text('Phone No'),
               Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
@@ -110,28 +114,78 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 
+  // Future<void> signUp(GlobalKey<FormState> registrationKey) async {
+  //   if (registrationKey.currentState!.validate()) {
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text('Account Created'),
+  //       duration: Duration(
+  //         milliseconds: 1500,
+  //       ),
+  //     ));
+  //     Navigator.pushNamed(context, '/home_page');
+  //   }
+  //
+  //   Provider.of<MyUserInfoModel>(context, listen: false).signUp(
+  //       _nameController.text,
+  //       _emailController.text,
+  //       _passwordController.text,
+  //       int.parse(_phoneNoController.text));
+  //
+  //   SharedPreferences userInfo = await SharedPreferences.getInstance();
+  //   String email = _emailController.text;
+  //   await userInfo.setString("$email name", _nameController.text);
+  //   await userInfo.setString("$email password", _passwordController.text);
+  //   await userInfo.setInt(
+  //       "$email phoneNo", int.tryParse(_phoneNoController.text)!);
+  // }
+
   Future<void> signUp(GlobalKey<FormState> registrationKey) async {
+    String scaffoldMSgContent = '';
     if (registrationKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Account Created'),
-        duration: Duration(
+      try {
+        final credentials = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text,
+              password: _passwordController.text
+          );
+
+        scaffoldMSgContent = 'Account Created';
+        Navigator.pushNamed(context, '/home_page');
+
+        Provider.of<MyUserInfoModel>(context, listen: false).signUp(
+            _nameController.text,
+            _emailController.text,
+            _passwordController.text,
+            int.parse(_phoneNoController.text));
+
+        await credentials.user?.updateDisplayName(_nameController.text);
+        await credentials.user?.updatePhoneNumber(_phoneNoController.text as PhoneAuthCredential);
+        print(credentials.user?.phoneNumber);
+
+
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          scaffoldMSgContent = 'The password provided is too weak.';
+          print(scaffoldMSgContent);
+        }
+        else if (e.code == 'email-already-in-use') {
+          scaffoldMSgContent = 'The account already exists for that email.';
+          print(scaffoldMSgContent);
+        }
+        else if(e.code == 'invalid-email') {
+          scaffoldMSgContent = 'The email provided is invalid.';
+          print(scaffoldMSgContent);
+        }
+      } catch (e) {
+        scaffoldMSgContent = e.toString();
+        print(e);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(scaffoldMSgContent),
+        duration: const Duration(
           milliseconds: 1500,
         ),
       ));
-      Navigator.pushNamed(context, '/home_page');
     }
-
-    Provider.of<MyUserInfoModel>(context, listen: false).signUp(
-        _nameController.text,
-        _emailController.text,
-        _passwordController.text,
-        int.parse(_phoneNoController.text));
-
-    SharedPreferences userInfo = await SharedPreferences.getInstance();
-    String email = _emailController.text;
-    await userInfo.setString("$email name", _nameController.text);
-    await userInfo.setString("$email password", _passwordController.text);
-    await userInfo.setInt(
-        "$email phoneNo", int.tryParse(_phoneNoController.text)!);
   }
 }

@@ -10,15 +10,21 @@ import 'package:provider/provider.dart';
 import 'package:my_app/models/my_cart_model.dart';
 import 'package:my_app/pages/add_product_page.dart';
 import 'package:my_app/pages/cart_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-
-void main() => runApp(MultiProvider(
-  providers: [
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => MyProductsListModel()),
     ChangeNotifierProvider(create: (context) => MyCartListModel()),
     ChangeNotifierProvider(create: (context) => MyUserInfoModel())
-  ],
-  child: const MyApp()));
+  ], child: const MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -39,10 +45,8 @@ class MyApp extends StatelessWidget {
         '/profile_page': (context) => const ProfilePage(),
       },
       theme: ThemeData(
-          textTheme: const TextTheme(
-              bodyMedium: TextStyle(color: Colors.white)
-          )
-      ),
+          textTheme:
+              const TextTheme(bodyMedium: TextStyle(color: Colors.white))),
       color: Colors.green,
       home: const WelcomePage(),
     );

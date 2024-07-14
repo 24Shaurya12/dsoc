@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class MyDrawerTile extends StatelessWidget {
   final Icon icon;
   final String msg;
-  final String route;
+  final String? route;
+  final Function? inputFunction;
 
-  const MyDrawerTile(this.icon, this.msg, this.route, {super.key});
+  const MyDrawerTile(this.icon, this.msg, this.route, {this.inputFunction, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,10 @@ class MyDrawerTile extends StatelessWidget {
           style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
         onTap: () {
-          Navigator.pushNamed(context, route);
+          if (inputFunction != null) {
+            inputFunction!();
+          }
+          Navigator.pushNamed(context, route!);
         },
       ),
     );

@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyUserInfoModel extends ChangeNotifier {
   late String userName;
@@ -7,17 +7,16 @@ class MyUserInfoModel extends ChangeNotifier {
   late String userPassword;
   late int userPhoneNo;
 
-  void login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     this.userEmail = email;
     this.userPassword = password;
 
-    SharedPreferences userInfo = await SharedPreferences.getInstance();
-    print('2: ${userInfo.getString("${this.userEmail} name")} and ${userInfo.getInt("${this.userEmail} phoneNo")}');
-
-    this.userName = userInfo.getString("${this.userEmail} name")!;
-    this.userPhoneNo = userInfo.getInt("${this.userEmail} phoneNo")!;
-
-    print('3: $userName and $userPhoneNo');
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        this.userName = user.displayName ?? 'No Username found';
+        this.userPhoneNo = 1234;
+      }
+    });
 
     notifyListeners();
   }
@@ -28,6 +27,14 @@ class MyUserInfoModel extends ChangeNotifier {
     this.userPassword = password;
     this.userPhoneNo = phoneNo;
 
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    this.userName = 'No User logged in';
+    this.userPhoneNo = 0;
+    this.userEmail = 'No User logged in';
+    await FirebaseAuth.instance.signOut();
     notifyListeners();
   }
 }
