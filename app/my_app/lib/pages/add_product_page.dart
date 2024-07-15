@@ -235,7 +235,6 @@ class _AddProductFormState extends State<AddProductForm> {
                 onPressed: () {
                   if (addProductKey.currentState!.validate()) {
                     final newItemInfo = MyItemInfo(
-                      Provider.of<MyProductsListModel>(context, listen: false).myItemsInfoList.length,
                       _barcodeController.text,
                       _titleController.text,
                       image,
@@ -250,7 +249,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     _stockController.clear();
                     imageFileLocation = null;
 
-                    Provider.of<MyProductsListModel>(context, listen: false).add(newItemInfo);
+                    Provider.of<MyProductsListModel>(context, listen: false).localAdd(newItemInfo);
 
                     Navigator.pushNamed(context, '/home_page');
                   }

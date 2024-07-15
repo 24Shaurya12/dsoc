@@ -3,16 +3,7 @@ import 'package:my_app/models/my_home_model.dart';
 
 class MyCartListModel extends ChangeNotifier {
 
-  // late MyProductsListModel _home;
-
   final List<MyItemInfo> _myCartItemsInfoList = [];
-
-  // MyProductsListModel get home => _home;
-
-  // set home(MyProductsListModel newHome) {
-  //   _home = newHome;
-  //   notifyListeners();
-  // }
 
   List<MyItemInfo> get myCartItemsInfoList => _myCartItemsInfoList;
 
@@ -27,7 +18,6 @@ class MyCartListModel extends ChangeNotifier {
   void addToCart(MyItemInfo myItemInfo) {
     _myCartItemsInfoList.contains(myItemInfo) ? () : _myCartItemsInfoList.add(myItemInfo);
     addQuantity(myItemInfo);
-    getLength();
     notifyListeners();
   }
 
