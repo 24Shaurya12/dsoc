@@ -1,23 +1,27 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class MyItemInfo {
   final String barcode;
   final String productName;
-  final Image image;
+  final Image? image;
+  final File? imageFile;
   final String weight;
   final int price;
   late int stock;
   late int cartQuantity;
 
-  MyItemInfo(this.barcode, this.productName, this.image,
-      this.weight, this.price, this.stock, this.cartQuantity);
+  MyItemInfo(this.barcode, this.productName,
+      this.weight, this.price, this.stock, this.cartQuantity, {this.image, this.imageFile});
 
   // to use in firebase, have to convert this class to a map first
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toFirestore(String firebaseImageUrl) {
     return {
       'barcode': barcode,
       'productName': productName,
+      'imageUrl': firebaseImageUrl,
       'weight': weight,
       'price': price,
       'stock': stock,
@@ -31,11 +35,12 @@ class MyItemInfo {
     return MyItemInfo(
         firestoreData?['barcode'],
         firestoreData?['productName'],
-        const Image(image: AssetImage("assets/no_image.jpg")),
         firestoreData?['weight'],
         firestoreData?['price'],
         firestoreData?['stock'],
-        0);
+        0,
+      image: Image.network(firestoreData?['imageUrl']) ?? Image.asset('assets/no_image.jpg'),
+    );
   }
 
   @override
@@ -48,8 +53,9 @@ class MyItemInfo {
 }
 
 class MyProductsListModel extends ChangeNotifier {
-  FirebaseFirestore firestoreDB = FirebaseFirestore.instance;
   final List<MyItemInfo> _myItemsInfoList = [];
+  final firestoreDB = FirebaseFirestore.instance;
+  final productsStorageRef = FirebaseStorage.instance.ref().child('Products');
 
   MyProductsListModel() {
     firestoreDB.collection('Products').snapshots().listen((event) {
@@ -57,7 +63,7 @@ class MyProductsListModel extends ChangeNotifier {
         switch (change.type) {
           case DocumentChangeType.added:
             var myItemInfo = MyItemInfo.fromFirestore(change.doc);
-            _myItemsInfoList.add(myItemInfo);
+            _myItemsInfoList.contains(myItemInfo) ? () : _myItemsInfoList.add(myItemInfo);
             break;
           case DocumentChangeType.modified:
             // TODO: Handle this case.
@@ -72,12 +78,17 @@ class MyProductsListModel extends ChangeNotifier {
 
   List<MyItemInfo> get myItemsInfoList => _myItemsInfoList;
 
-  void localAdd(MyItemInfo myItemInfo) {
-    _myItemsInfoList.add(myItemInfo);
-    notifyListeners();
-    firestoreDB.collection('Products').add(myItemInfo.toFirestore()).then(
-        (DocumentReference currentDoc) =>
-            print('Document added, ID: ${currentDoc.id}'));
+  Future<void> localAdd(MyItemInfo myItemInfo) async {
+    await productsStorageRef.child(myItemInfo.barcode).putFile(myItemInfo.imageFile ?? File('assets/no_image.jpg'));
+
+    String firebaseImageUrl;
+    try {
+      firebaseImageUrl= await productsStorageRef.child(myItemInfo.barcode).getDownloadURL();
+    } catch (e) {
+      firebaseImageUrl = '';
+    }
+
+    await firestoreDB.collection('Products').add(myItemInfo.toFirestore(firebaseImageUrl));
   }
 
   MyItemInfo getByIndex(int index) => _myItemsInfoList[index];

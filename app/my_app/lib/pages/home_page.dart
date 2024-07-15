@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
 import 'package:my_app/models/my_cart_model.dart';
@@ -83,7 +82,7 @@ class MyItem extends StatelessWidget {
         Provider.of<MyCartListModel>(context, listen: true).isInCart(itemInfo);
 
     return ListTile(
-      leading: SizedBox(width: 40, child: itemInfo.image),
+      leading: SizedBox(width: 40, child: itemInfo.image ?? Image.asset('assets/no_image.jpg')),
       title: Text(
         itemInfo.productName,
         style: const TextStyle(color: Colors.white),

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/my_user_model.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +15,6 @@ class ProfilePage extends StatelessWidget {
       endDrawer: const MyEndDrawer(),
       body: Consumer<MyUserInfoModel>(
         builder: (context, userInfo, child) {
-          print("rebuild hua");
           return DefaultTextStyle(
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.white, fontSize: 20),

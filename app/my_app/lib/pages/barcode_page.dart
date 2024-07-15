@@ -30,7 +30,6 @@ class BarcodePageStatus extends State<BarcodePage> {
               onPressed: () async {
                 String barcodeResult = await barcodeScanner();
                 Product? productResult = await getProductInfo(barcodeResult);
-                print(productResult?.productName);
                 setState(() {
                   result = barcodeResult;
                   product = productResult;
@@ -50,12 +49,8 @@ class BarcodePageStatus extends State<BarcodePage> {
   }
 
   Future<String> barcodeScanner() async {
-    print("Start");
-    var cameraPermission = await Permission.camera.request();
-    print(cameraPermission);
+    await Permission.camera.request();
     var barcodeResult = await FlutterBarcodeScanner.scanBarcode("#00FF00", "Cancel", false, ScanMode.DEFAULT);
-    print('end');
-    print('result is $barcodeResult');
     return barcodeResult;
     // print((Colors.green.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0'));
     // (Colors.green.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0')
@@ -66,14 +61,10 @@ class BarcodePageStatus extends State<BarcodePage> {
     OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[OpenFoodFactsLanguage.ENGLISH];
     OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.INDIA;
 
-    print(barcode);
-
     final ProductQueryConfiguration itemDetails = ProductQueryConfiguration('7622201431594', version: ProductQueryVersion.v3);
     final ProductResultV3 result = await OpenFoodAPIClient.getProductV3(itemDetails);
 
-    final String pt = result.product?.productName ?? 'nothing';
-
-    print(pt);
+    result.product?.productName ?? 'nothing';
 
     return result.product;
   }

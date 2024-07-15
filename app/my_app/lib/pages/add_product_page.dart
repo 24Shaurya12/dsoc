@@ -71,13 +71,10 @@ class _AddProductFormState extends State<AddProductForm> {
   final _barcodeController = TextEditingController();
   final _weightController = TextEditingController();
 
-  String result = "no";
-  Product? product;
-
   final addProductKey = GlobalKey<FormState>();
 
-  File? imageFileLocation; //add default image and make this non nullable
-  Image image = const Image(image: AssetImage("assets/no_image.jpg"));
+  File imageFileAdd = File('assets/no_image.jpg');
+  Image imageAdd = const Image(image: AssetImage("assets/no_image.jpg"));
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +101,7 @@ class _AddProductFormState extends State<AddProductForm> {
                       itemInfoSharePreferences.setString("weight", "");
                       itemInfoSharePreferences.setString("productName", "");
                       itemInfoSharePreferences.setString("imageURL", "");
-                      image = const Image(image: AssetImage("assets/no_image.jpg"));
+                      imageAdd = const Image(image: AssetImage("assets/no_image.jpg"));
 
                       String? barcodeResult = await barcodeScanner();
                       if (barcodeResult != null) {
@@ -146,7 +143,7 @@ class _AddProductFormState extends State<AddProductForm> {
                         _weightController.text = itemInfoSharePreferences.getString("weight") ?? "";
                         _titleController.text = itemInfoSharePreferences.getString('productName') ?? "";
                         if (itemInfoSharePreferences.getString("imageURL") != null && itemInfoSharePreferences.getString("imageURL") != "") {
-                          image = Image.network(itemInfoSharePreferences.getString("imageURL")!);
+                          imageAdd = Image.network(itemInfoSharePreferences.getString("imageURL")!);
                         }
                       });
                     },
@@ -223,7 +220,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     child: const Text('Pick Image', style: TextStyle(fontSize: 18, color: Colors.black),),
                   ),
                   const Expanded(child: SizedBox()),
-                  SizedBox(width: 80, child: image),
+                  SizedBox(width: 80, child: imageAdd),
                   const SizedBox(width: 70,),
                 ]
               )
@@ -237,7 +234,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     final newItemInfo = MyItemInfo(
                       _barcodeController.text,
                       _titleController.text,
-                      image,
+                      imageFile: imageFileAdd,
                       _weightController.text,
                       int.parse(_priceController.text),
                       int.parse(_stockController.text),
@@ -247,7 +244,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     _titleController.clear();
                     _priceController.clear();
                     _stockController.clear();
-                    imageFileLocation = null;
+                    imageFileAdd = File('assets/no_image.jpg');
 
                     Provider.of<MyProductsListModel>(context, listen: false).localAdd(newItemInfo);
 
@@ -268,14 +265,14 @@ class _AddProductFormState extends State<AddProductForm> {
   Future pickImage() async {
     var cameraPermission = await Permission.camera.request();
     if (cameraPermission.isGranted) {
-      final returnedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+      final returnedImage = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 20);
       if(returnedImage == null) {
         return;
       }
       else {
         setState(() {
-          imageFileLocation = File(returnedImage.path);
-          image = Image.file(imageFileLocation!);
+          imageFileAdd = File(returnedImage.path);
+          imageAdd = Image.file(imageFileAdd);
         });
       }
     }

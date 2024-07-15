@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -7,33 +8,38 @@ class MyUserInfoModel extends ChangeNotifier {
   late String userPassword;
   late int userPhoneNo;
 
-  Future<void> login(String email, String password) async {
-    this.userEmail = email;
-    this.userPassword = password;
+  final firestoreDB = FirebaseFirestore.instance;
 
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        this.userName = user.displayName ?? 'No Username found';
-        this.userPhoneNo = 1234;
-      }
+  Future<void> login(String email, String password) async {
+    userEmail = email;
+    userPassword = password;
+
+    await firestoreDB.collection('Users').where('userEmail', isEqualTo: email).get().then((firestoreUserData) {
+      userName = firestoreUserData.docs[0]['userName'] ?? 'No Username found';
+      userPhoneNo = firestoreUserData.docs[0]['phoneNo'] ?? 'No Phone Number found';
     });
 
     notifyListeners();
   }
 
-  void signUp(String userName, String email, String password, int phoneNo) {
-    this.userName = userName;
-    this.userEmail = email;
-    this.userPassword = password;
-    this.userPhoneNo = phoneNo;
-
+  Future<void> signUp(String name, String email, String password, int phoneNo) async {
+    userName = name;
+    userEmail = email;
+    userPassword = password;
+    userPhoneNo = phoneNo;
     notifyListeners();
+
+    firestoreDB.collection('Users').add({
+      'userName': name,
+      'userEmail' : email,
+      'phoneNo' : phoneNo,
+    });
   }
 
   Future<void> logout() async {
-    this.userName = 'No User logged in';
-    this.userPhoneNo = 0;
-    this.userEmail = 'No User logged in';
+    userName = 'No User logged in';
+    userPhoneNo = 0;
+    userEmail = 'No User logged in';
     await FirebaseAuth.instance.signOut();
     notifyListeners();
   }

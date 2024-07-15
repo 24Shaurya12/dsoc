@@ -189,38 +189,11 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  // Future<void> login(GlobalKey<FormState> loginKey) async {
-  //   loginKey.currentState!.validate();
-  //
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //
-  //   String email = _emailController.text;
-  //
-  //   if (prefs.getString("$email password") == _passwordController.text &&
-  //       _passwordController.text != '') {
-  //     const snackBar = SnackBar(
-  //       content: Text('Login Successful'),
-  //       duration: Duration(seconds: 1),
-  //     );
-  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  //     Navigator.pushNamed(context, '/home_page');
-  //     Provider.of<MyUserInfoModel>(context, listen: false)
-  //         .login(_emailController.text, _passwordController.text);
-  //   }
-  //   else {
-  //     const snackBar = SnackBar(
-  //       content: Text("Email and Password don't match"),
-  //       duration: Duration(seconds: 2),
-  //     );
-  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  //   }
-  // }
-
   Future<void> login(GlobalKey<FormState> loginKey) async {
     String scaffoldMSgContent = '';
     if (loginKey.currentState!.validate()) {
       try {
-        final credential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text);
@@ -231,7 +204,6 @@ class _LoginFormState extends State<LoginForm> {
             .login(_emailController.text, _passwordController.text);
 
       } on FirebaseAuthException catch (e) {
-        print('Ye Dekh ${e.code}');
         if (e.code == 'user-not-found') {
           scaffoldMSgContent = 'No user found for that email.';
         } else if (e.code == 'invalid-credential') {
@@ -244,7 +216,6 @@ class _LoginFormState extends State<LoginForm> {
       } catch (e) {
         scaffoldMSgContent = e.toString();
       }
-      print(scaffoldMSgContent);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(scaffoldMSgContent),
         duration: const Duration(
