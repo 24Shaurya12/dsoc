@@ -117,7 +117,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
     String scaffoldMSgContent = '';
     if (registrationKey.currentState!.validate()) {
       try {
-        final credentials = await FirebaseAuth.instance
+        final UserCredential credentials = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: _emailController.text,
               password: _passwordController.text
@@ -129,7 +129,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         Provider.of<MyUserInfoModel>(context, listen: false).signUp(
             _nameController.text,
             _emailController.text,
-            _passwordController.text,
+            // _passwordController.text,
             int.parse(_phoneNoController.text));
 
         await credentials.user?.updateDisplayName(_nameController.text);
