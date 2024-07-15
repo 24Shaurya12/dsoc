@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
+import 'package:my_app/models/internet_connectivity.dart';
 import 'package:my_app/models/my_user_model.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
@@ -191,31 +192,40 @@ class _LoginFormState extends State<LoginForm> {
 
   Future<void> login(GlobalKey<FormState> loginKey) async {
     String scaffoldMSgContent = '';
-    if (loginKey.currentState!.validate()) {
-      try {
-        await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text);
 
-        scaffoldMSgContent = 'Login Successful';
-        Navigator.pushNamed(context, '/home_page');
-        Provider.of<MyUserInfoModel>(context, listen: false)
-            .login(_emailController.text, _passwordController.text);
+    if (await getConnectivity() == false) {
+      scaffoldMSgContent = 'No Internet! Please connect to the Internet';
+    }
+    else {
+      if (loginKey.currentState!.validate()) {
+        try {
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+              email: _emailController.text,
+              password: _passwordController.text);
 
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          scaffoldMSgContent = 'No user found for that email.';
-        } else if (e.code == 'invalid-credential') {
-          scaffoldMSgContent = "User and Password don't match";
-        } else if (e.code == 'invalid-email') {
-          scaffoldMSgContent = 'The email provided is invalid.';
-        } else if (e.code == 'too-many-requests') {
-          scaffoldMSgContent = 'Too many requests';
+          scaffoldMSgContent = 'Login Successful';
+          Navigator.pushNamed(context, '/home_page');
+          Provider.of<MyUserInfoModel>(context, listen: false)
+              .login(_emailController.text, _passwordController.text);
+
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'user-not-found') {
+            scaffoldMSgContent = 'No user found for that email.';
+          } else if (e.code == 'invalid-credential') {
+            scaffoldMSgContent = "User and Password don't match";
+          } else if (e.code == 'invalid-email') {
+            scaffoldMSgContent = 'The email provided is invalid.';
+          } else if (e.code == 'too-many-requests') {
+            scaffoldMSgContent = 'Too many requests';
+          }
+        } catch (e) {
+          scaffoldMSgContent = e.toString();
         }
-      } catch (e) {
-        scaffoldMSgContent = e.toString();
       }
+    }
+
+    if (scaffoldMSgContent != '') {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(scaffoldMSgContent),
         duration: const Duration(

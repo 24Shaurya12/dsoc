@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../models/internet_connectivity.dart';
 import '../models/my_user_model.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -107,15 +108,26 @@ class WelcomePage extends StatelessWidget {
                 ),
                 IconButton(
                     onPressed: () async {
-                      try {
-                        final UserCredential credentials = await signInWithGoogle();
-                        Provider.of<MyUserInfoModel>(context, listen: false).signUp(
-                            credentials.user?.displayName ?? 'No username',
-                            credentials.user?.email ?? 'No email',
-                            0);
-                        Navigator.pushNamed(context, '/home_page');
-                      } on Exception catch (e) {
-                        print(e);
+                      if(await getConnectivity() == false) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('No Internet! Please connect to the Internet'),
+                          duration: Duration(
+                            milliseconds: 1500,
+                          ),
+                        ));
+                      }
+                      else {
+                        try {
+                          final UserCredential credentials = await signInWithGoogle();
+                          Provider.of<MyUserInfoModel>(context, listen: false)
+                              .signUp(
+                              credentials.user?.displayName ?? 'No username',
+                              credentials.user?.email ?? 'No email',
+                              0);
+                          Navigator.pushNamed(context, '/home_page');
+                        } on Exception catch (e) {
+                          print(e);
+                        }
                       }
                     },
                     icon: const Icon(
@@ -148,6 +160,7 @@ class WelcomePage extends StatelessWidget {
 }
 
 Future<UserCredential> signInWithGoogle() async {
+
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
   final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
 import 'package:my_app/custom_classes/my_text_field.dart';
+import 'package:my_app/models/internet_connectivity.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:my_app/custom_classes/my_navigation_drawer.dart';
@@ -115,39 +116,45 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   Future<void> signUp(GlobalKey<FormState> registrationKey) async {
     String scaffoldMSgContent = '';
-    if (registrationKey.currentState!.validate()) {
-      try {
-        final UserCredential credentials = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
+
+    if(await getConnectivity() == false) {
+      scaffoldMSgContent = "No Internet! Please connect to the Internet";
+    }
+    else {
+      if (registrationKey.currentState!.validate()) {
+        try {
+          final UserCredential credentials = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
               email: _emailController.text,
               password: _passwordController.text
           );
 
-        scaffoldMSgContent = 'Account Created';
-        Navigator.pushNamed(context, '/home_page');
+          scaffoldMSgContent = 'Account Created';
+          Navigator.pushNamed(context, '/home_page');
 
-        Provider.of<MyUserInfoModel>(context, listen: false).signUp(
-            _nameController.text,
-            _emailController.text,
-            // _passwordController.text,
-            int.parse(_phoneNoController.text));
+          Provider.of<MyUserInfoModel>(context, listen: false).signUp(
+              _nameController.text,
+              _emailController.text,
+              int.parse(_phoneNoController.text));
 
-        await credentials.user?.updateDisplayName(_nameController.text);
-
-
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          scaffoldMSgContent = 'The password provided is too weak.';
+          await credentials.user?.updateDisplayName(_nameController.text);
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            scaffoldMSgContent = 'The password provided is too weak.';
+          }
+          else if (e.code == 'email-already-in-use') {
+            scaffoldMSgContent = 'The account already exists for that email.';
+          }
+          else if (e.code == 'invalid-email') {
+            scaffoldMSgContent = 'The email provided is invalid.';
+          }
+        } catch (e) {
+          scaffoldMSgContent = e.toString();
         }
-        else if (e.code == 'email-already-in-use') {
-          scaffoldMSgContent = 'The account already exists for that email.';
-        }
-        else if(e.code == 'invalid-email') {
-          scaffoldMSgContent = 'The email provided is invalid.';
-        }
-      } catch (e) {
-        scaffoldMSgContent = e.toString();
       }
+    }
+
+    if (scaffoldMSgContent != '') {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(scaffoldMSgContent),
         duration: const Duration(

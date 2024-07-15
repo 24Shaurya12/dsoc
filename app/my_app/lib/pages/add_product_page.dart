@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
+import 'package:my_app/models/internet_connectivity.dart';
 import 'package:my_app/models/my_home_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -229,26 +230,36 @@ class _AddProductFormState extends State<AddProductForm> {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {
-                  if (addProductKey.currentState!.validate()) {
-                    final newItemInfo = MyItemInfo(
-                      _barcodeController.text,
-                      _titleController.text,
-                      imageFile: imageFileAdd,
-                      _weightController.text,
-                      int.parse(_priceController.text),
-                      int.parse(_stockController.text),
-                      0,
-                    );
+                onPressed: () async {
+                  if(await getConnectivity() == false) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('No Internet! Please connect to the Internet'),
+                      duration: Duration(
+                        milliseconds: 1500,
+                      ),
+                    ));
+                  }
+                  else {
+                    if (addProductKey.currentState!.validate()) {
+                      final newItemInfo = MyItemInfo(
+                        _barcodeController.text,
+                        _titleController.text,
+                        imageFile: imageFileAdd,
+                        _weightController.text,
+                        int.parse(_priceController.text),
+                        int.parse(_stockController.text),
+                        0,
+                      );
 
-                    _titleController.clear();
-                    _priceController.clear();
-                    _stockController.clear();
-                    imageFileAdd = File('assets/no_image.jpg');
+                      _titleController.clear();
+                      _priceController.clear();
+                      _stockController.clear();
+                      imageFileAdd = File('assets/no_image.jpg');
 
-                    Provider.of<MyProductsListModel>(context, listen: false).localAdd(newItemInfo);
+                      Provider.of<MyProductsListModel>(context, listen: false).localAdd(newItemInfo);
 
-                    Navigator.pushNamed(context, '/home_page');
+                      Navigator.pushNamed(context, '/home_page');
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
