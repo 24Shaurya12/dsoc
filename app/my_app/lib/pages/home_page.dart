@@ -11,7 +11,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       appBar: const MyAppBar(
         backOption: false,
       ),
@@ -20,33 +19,29 @@ class HomePage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(60, 40, 60, 0),
-            child: Row(children: [
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 218, 192, 163)
-                  ),
+            child: Row(
+              children: [
+                ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/add_product_page');
                   },
                   child: const Text(
                     'Add Product',
-                    style: TextStyle(color: Colors.black),
-                  )),
-              const Expanded(
-                child: SizedBox(),
-              ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromARGB(255, 218, 192, 163)),
+                  ),
+                ),
+                const Expanded(
+                  child: SizedBox(),
+                ),
+                ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/cart_page');
                   },
                   child: const Text(
                     'Cart',
-                    style: TextStyle(color: Colors.black),
-                  )),
-            ]),
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Consumer<MyProductsListModel>(
@@ -82,14 +77,16 @@ class MyItem extends StatelessWidget {
         Provider.of<MyCartListModel>(context, listen: true).isInCart(itemInfo);
 
     return ListTile(
-      leading: SizedBox(width: 40, child: itemInfo.image ?? Image.asset('assets/no_image.jpg')),
+      leading: SizedBox(
+          width: 40,
+          child: itemInfo.image ?? Image.asset('assets/no_image.jpg')),
       title: Text(
         itemInfo.productName,
-        style: const TextStyle(color: Colors.white),
+        style: Theme.of(context).textTheme.labelLarge,
       ),
       subtitle: Text(
         'Price = ${itemInfo.price}, $stockMsg',
-        style: const TextStyle(color: Colors.white),
+        style: Theme.of(context).textTheme.labelSmall,
       ),
       trailing:
           isInCart ? ChangeQuantityButton(itemInfo) : AddItemButton(itemInfo),
@@ -107,16 +104,14 @@ class AddItemButton extends StatelessWidget {
     return SizedBox(
       width: 90,
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
-          onPressed: () {
-            Provider.of<MyCartListModel>(context, listen: false)
-                .addToCart(itemInfo);
-          },
-          child: const Text(
-            'Add',
-            style: TextStyle(color: Colors.black),
-          )),
+        onPressed: () {
+          Provider.of<MyCartListModel>(context, listen: false)
+              .addToCart(itemInfo);
+        },
+        child: const Text(
+          'Add',
+        ),
+      ),
     );
   }
 }
@@ -130,7 +125,7 @@ class ChangeQuantityButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var itemStock = itemInfo.stock;
     return SizedBox(
-      width: 100,
+      width: 110,
       child: Consumer<MyCartListModel>(builder: (context, cartList, child) {
         return Row(
           children: [
@@ -138,11 +133,10 @@ class ChangeQuantityButton extends StatelessWidget {
               width: 40,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
+                  padding: EdgeInsets.zero,
+                ),
                 child: const Icon(
                   Icons.remove,
-                  color: Colors.black,
                 ),
                 onPressed: () {
                   cartList.removeQuantity(itemInfo);
@@ -150,17 +144,19 @@ class ChangeQuantityButton extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: Center(
-                    child: Text(
-              cartList.getQuantity(itemInfo).toString(),
-              style: const TextStyle(color: Colors.white),
-            ))),
+              child: Center(
+                child: Text(
+                  cartList.getQuantity(itemInfo).toString(),
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ),
+            ),
             SizedBox(
               width: 40,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
+                  padding: EdgeInsets.zero,
+                ),
                 onPressed: itemStock != 0
                     ? () {
                         cartList.addQuantity(itemInfo);
@@ -168,7 +164,6 @@ class ChangeQuantityButton extends StatelessWidget {
                     : null,
                 child: const Icon(
                   Icons.add,
-                  color: Colors.black,
                 ),
               ),
             ),

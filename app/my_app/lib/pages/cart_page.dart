@@ -13,7 +13,6 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       appBar: const MyAppBar(),
       endDrawer: const MyEndDrawer(),
-      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       body: Column(
         children: [
           Expanded(

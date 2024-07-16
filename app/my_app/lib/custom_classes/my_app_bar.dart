@@ -10,25 +10,26 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: backOption,
-      iconTheme: const IconThemeData(color: Colors.white),
-      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       actions: [
         IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/cart_page');
-            },
-            icon: const Icon(Icons.shopping_cart)),
+          onPressed: () {
+            Navigator.pushNamed(context, '/cart_page');
+          },
+          icon: const Icon(Icons.shopping_cart),
+        ),
         IconButton(
           onPressed: () {
             Scaffold.of(context).openEndDrawer();
           },
-          icon: const Icon(FontAwesomeIcons.barsStaggered,
-              color: Colors.white, size: 25),
+          icon: const Icon(
+            FontAwesomeIcons.barsStaggered,
+          ),
         )
       ],
-      title: const Text('DSOC',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white)),
+      title: Text(
+        'DSOC',
+        style: Theme.of(context).textTheme.labelLarge,
+      ),
     );
   }
 

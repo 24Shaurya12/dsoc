@@ -12,7 +12,6 @@ import 'package:my_app/pages/add_product_page.dart';
 import 'package:my_app/pages/cart_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,9 +44,91 @@ class MyApp extends StatelessWidget {
         '/profile_page': (context) => const ProfilePage(),
       },
       theme: ThemeData(
-          textTheme:
-              const TextTheme(bodyMedium: TextStyle(color: Colors.white))),
-      color: Colors.green,
+        colorScheme: ColorScheme.fromSwatch(
+          // seedColor:  const Color.fromARGB(255, 16, 44, 87)
+          primarySwatch: Colors.amber,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color.fromARGB(255, 240, 240, 225),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          errorStyle: const TextStyle(
+            color: Color.fromARGB(255, 218, 192, 102),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide: const BorderSide(
+              width: 1.0,
+              color: Color.fromARGB(255, 218, 192, 102),
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide: const BorderSide(
+              width: 2.0,
+              color: Color.fromARGB(255, 218, 192, 102),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide: const BorderSide(
+              width: 2.0,
+              color: Colors.black,
+            ),
+          )
+        ),
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: 32,
+          ),
+          headlineMedium: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+          headlineSmall: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
+          labelLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+          ),
+          labelMedium: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          labelSmall: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          )
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 218, 192, 163),
+            foregroundColor: Colors.black,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 16, 44, 87),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 16, 44, 87),
+          foregroundColor: Colors.white,
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.black,
+        )
+      ),
       home: const WelcomePage(),
     );
   }

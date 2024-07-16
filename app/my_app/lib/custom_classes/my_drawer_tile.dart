@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class MyDrawerTile extends StatelessWidget {
-  final Icon icon;
+  final IconData iconData;
   final String msg;
   final String? route;
   final Function? inputFunction;
 
-  const MyDrawerTile(this.icon, this.msg, this.route, {this.inputFunction, super.key});
+  const MyDrawerTile(this.iconData, this.msg, this.route,
+      {this.inputFunction, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +15,14 @@ class MyDrawerTile extends StatelessWidget {
       height: 60,
       width: double.infinity,
       child: ListTile(
-        leading: icon,
+        leading: Icon(
+          iconData,
+          size: 30,
+          color: Colors.white,
+        ),
         title: Text(
           msg,
-          style: const TextStyle(fontSize: 20, color: Colors.white),
+          style: Theme.of(context).textTheme.labelMedium,
         ),
         onTap: () {
           if (inputFunction != null) {

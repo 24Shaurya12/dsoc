@@ -24,14 +24,6 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
         }
         return null;
       },
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: const Color.fromARGB(255, 255, 250, 239),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(100),
-          borderSide: const BorderSide(),
-        ),
-      ),
     );
   }
 }

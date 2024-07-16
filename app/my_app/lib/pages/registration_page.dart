@@ -6,7 +6,6 @@ import 'package:my_app/models/internet_connectivity.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:my_app/custom_classes/my_navigation_drawer.dart';
-
 import '../models/my_user_model.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -15,25 +14,23 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const MyAppBar(),
-        endDrawer: const MyEndDrawer(),
-        backgroundColor: const Color.fromARGB(255, 16, 44, 87),
-        body: ListView(
-          children: const [
-            Center(
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: Text(
-                    'Create Account Now!',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
-                  )),
+      appBar: const MyAppBar(),
+      endDrawer: const MyEndDrawer(),
+      body: ListView(
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Text(
+                'Create Account Now!',
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
             ),
-            RegistrationForm(),
-          ],
-        ));
+          ),
+          const RegistrationForm(),
+        ],
+      ),
+    );
   }
 }
 
@@ -56,59 +53,91 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Widget build(BuildContext context) {
     return Form(
       key: registrationKey,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          fontWeight: FontWeight.w900,
-          fontSize: 20,
-          color: Colors.white,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Full Name'),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-                  child:
-                      MyTextFormField(_nameController, "Please enter a name")),
-              const Text('Email'),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-                  child:
-                      MyTextFormField(_emailController, "Please enter email")),
-              const Text('Password'),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-                  child: MyTextFormField(
-                    _passwordController,
-                    "Please enter password",
-                    obscureText: true,
-                  )),
-              const Text('Phone No'),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-                  child: MyTextFormField(
-                      _phoneNoController, "Please enter phone number")),
-              SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: ElevatedButton(
-                  onPressed: () {
-                    signUp(registrationKey);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromARGB(255, 218, 192, 163)),
-                  child: const Text('Sign Up',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 25)),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Full Name',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+              child: TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  helperText: '*required',
+                  helperStyle: TextStyle(
+                    color: Color.fromARGB(255, 218, 192, 102),
+                  )
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a name';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Text(
+              'Email',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+              child: MyTextFormField(
+                _emailController,
+                "Please enter email",
+              ),
+            ),
+            Text(
+              'Password',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+              child: TextFormField(
+                controller: _passwordController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter password";
+                  }
+                  return null;
+                },
+                obscureText: true,
+                decoration: const InputDecoration(
+                  suffixIcon: Icon(Icons.remove_red_eye),
                 ),
               ),
-            ],
-          ),
+            ),
+            Text(
+              'Phone No',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
+              child: MyTextFormField(
+                _phoneNoController,
+                "Please enter phone number",
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  signUp(registrationKey);
+                },
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -117,17 +146,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Future<void> signUp(GlobalKey<FormState> registrationKey) async {
     String scaffoldMSgContent = '';
 
-    if(await getConnectivity() == false) {
+    if (await getConnectivity() == false) {
       scaffoldMSgContent = "No Internet! Please connect to the Internet";
-    }
-    else {
+    } else {
       if (registrationKey.currentState!.validate()) {
         try {
           final UserCredential credentials = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
-              email: _emailController.text,
-              password: _passwordController.text
-          );
+                  email: _emailController.text,
+                  password: _passwordController.text);
 
           scaffoldMSgContent = 'Account Created';
           Navigator.pushNamed(context, '/home_page');
@@ -136,16 +163,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
               _nameController.text,
               _emailController.text,
               int.parse(_phoneNoController.text));
-
           await credentials.user?.updateDisplayName(_nameController.text);
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
             scaffoldMSgContent = 'The password provided is too weak.';
-          }
-          else if (e.code == 'email-already-in-use') {
+          } else if (e.code == 'email-already-in-use') {
             scaffoldMSgContent = 'The account already exists for that email.';
-          }
-          else if (e.code == 'invalid-email') {
+          } else if (e.code == 'invalid-email') {
             scaffoldMSgContent = 'The email provided is invalid.';
           }
         } catch (e) {
@@ -155,12 +179,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
     }
 
     if (scaffoldMSgContent != '') {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(scaffoldMSgContent),
-        duration: const Duration(
-          milliseconds: 1500,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(scaffoldMSgContent),
+          duration: const Duration(
+            milliseconds: 1500,
+          ),
         ),
-      ));
+      );
     }
   }
 }

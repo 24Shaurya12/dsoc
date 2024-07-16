@@ -10,14 +10,12 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       appBar: const MyAppBar(),
       endDrawer: const MyEndDrawer(),
       body: Consumer<MyUserInfoModel>(
         builder: (context, userInfo, child) {
           return DefaultTextStyle(
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white, fontSize: 20),
+            style: Theme.of(context).textTheme.labelMedium!,
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
@@ -33,23 +31,24 @@ class ProfilePage extends StatelessWidget {
                         height: 20,
                       ),
                       Text(
-                          'User Phone Number: ${userInfo.userPhoneNo.toString()}'),
+                        'User Phone Number: ${userInfo.userPhoneNo.toString()}',
+                      ),
                       const SizedBox(
                         height: 40,
                       ),
                       SizedBox(
                         height: 50,
+                        width: 150,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 218, 192, 163)),
                           onPressed: () async {
                             Navigator.pushNamed(context, '/welcome_page');
                             userInfo.logout();
                           },
                           child: const Text(
                             'Logout',
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                       ),

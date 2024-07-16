@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import '../models/internet_connectivity.dart';
 import '../models/my_user_model.dart';
 
@@ -16,7 +15,6 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Uri devClubFacebook = Uri.parse('https://www.facebook.com/tech.iitd/');
-    Uri devClubGoogle = Uri.parse('https://devclub.in/#/');
     Uri devClubLinkedIn = Uri.parse(
         'https://www.linkedin.com/company/devclub-iit-delhi/?originalSubdomain=in');
     Uri devClubInstagram =
@@ -29,38 +27,37 @@ class WelcomePage extends StatelessWidget {
           backOption: false,
         ),
         endDrawer: const MyEndDrawer(),
-        backgroundColor: const Color.fromARGB(255, 16, 44, 87),
         body: ListView(
           children: [
             Container(
-                padding: const EdgeInsets.all(45.0),
-                child: const Image(image: AssetImage('assets/logo.png'))),
-            const Text(
-                textAlign: TextAlign.center,
-                'Hello, Welcome!',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
+              padding: const EdgeInsets.all(45.0),
+              child: const Image(
+                image: AssetImage('assets/logo.png'),
+              ),
+            ),
+            Text(
+              textAlign: TextAlign.center,
+              'Hello, Welcome!',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontSize: 38,
+                  ),
+            ),
             const SizedBox(
               height: 20,
             ),
-            const Text(
+            Text(
               'Welcome to DSOC 2024',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(50, 50, 50, 30),
               child: SizedBox(
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 218, 192, 163)
-                  ),
                   child: const Text(
                     'Login',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
                     Navigator.pushNamed(context, '/login_page');
@@ -73,14 +70,9 @@ class WelcomePage extends StatelessWidget {
               child: SizedBox(
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 218, 192, 163)),
                   child: const Text(
                     'Sign Up',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
                     Navigator.pushNamed(context, '/registration_page');
@@ -88,10 +80,14 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
             ),
-            const Center(
+            Center(
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 40, 0, 5),
-                  child: Text('or via social media')),
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 5),
+                child: Text(
+                  'or via social media',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -103,27 +99,31 @@ class WelcomePage extends StatelessWidget {
                   },
                   icon: const Icon(
                     FontAwesomeIcons.facebookF,
-                    color: Color.fromARGB(255, 218, 192, 163),
                   ),
                 ),
                 IconButton(
                     onPressed: () async {
-                      if(await getConnectivity() == false) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('No Internet! Please connect to the Internet'),
-                          duration: Duration(
-                            milliseconds: 1500,
+                      if (await getConnectivity() == false) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'No Internet! Please connect to the Internet',
+                            ),
+                            duration: Duration(
+                              milliseconds: 1500,
+                            ),
                           ),
-                        ));
-                      }
-                      else {
+                        );
+                      } else {
                         try {
-                          final UserCredential credentials = await signInWithGoogle();
+                          final UserCredential credentials =
+                              await signInWithGoogle();
                           Provider.of<MyUserInfoModel>(context, listen: false)
                               .signUp(
-                              credentials.user?.displayName ?? 'No username',
-                              credentials.user?.email ?? 'No email',
-                              0);
+                                  credentials.user?.displayName ??
+                                      'No username',
+                                  credentials.user?.email ?? 'No email',
+                                  0);
                           Navigator.pushNamed(context, '/home_page');
                         } on Exception catch (e) {
                           print(e);
@@ -132,24 +132,23 @@ class WelcomePage extends StatelessWidget {
                     },
                     icon: const Icon(
                       FontAwesomeIcons.google,
-                      color: Color.fromARGB(255, 218, 192, 163),
                     )),
                 IconButton(
-                    onPressed: () async {
-                      launchUrl(devClubInstagram);
-                    },
-                    icon: const Icon(
-                      FontAwesomeIcons.instagram,
-                      color: Color.fromARGB(255, 218, 192, 163),
-                    )),
+                  onPressed: () async {
+                    launchUrl(devClubInstagram);
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.instagram,
+                  ),
+                ),
                 IconButton(
-                    onPressed: () async {
-                      launchUrl(devClubLinkedIn);
-                    },
-                    icon: const Icon(
-                      FontAwesomeIcons.linkedinIn,
-                      color: Color.fromARGB(255, 218, 192, 163),
-                    )),
+                  onPressed: () async {
+                    launchUrl(devClubLinkedIn);
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.linkedinIn,
+                  ),
+                ),
               ],
             )
           ],
@@ -160,10 +159,10 @@ class WelcomePage extends StatelessWidget {
 }
 
 Future<UserCredential> signInWithGoogle() async {
-
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  final GoogleSignInAuthentication? googleAuth =
+      await googleUser?.authentication;
 
   final credential = GoogleAuthProvider.credential(
     accessToken: googleAuth?.accessToken,
@@ -172,4 +171,3 @@ Future<UserCredential> signInWithGoogle() async {
 
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
-

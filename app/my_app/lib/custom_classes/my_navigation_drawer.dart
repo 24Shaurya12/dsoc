@@ -14,13 +14,36 @@ class MyEndDrawer extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.only(top: 70),
         children: [
-          const MyDrawerTile(Icon(Icons.list, size: 30, color: Colors.white,), 'Products Catalog', '/home_page'),
-          const MyDrawerTile(Icon(Icons.add, size: 30, color: Colors.white,), 'Add New Product', '/add_product_page'),
-          const MyDrawerTile(Icon(Icons.shopping_cart_checkout, size: 30, color: Colors.white,), 'Go to Cart', '/cart_page'),
+          const MyDrawerTile(
+            Icons.list,
+            'Products Catalog',
+            '/home_page',
+          ),
+          const MyDrawerTile(
+            Icons.add,
+            'Add New Product',
+            '/add_product_page',
+          ),
+          const MyDrawerTile(
+            Icons.shopping_cart_checkout,
+            'Go to Cart',
+            '/cart_page',
+          ),
           const Divider(),
-          const MyDrawerTile(Icon(FontAwesomeIcons.userAstronaut, size: 27, color: Colors.white,), 'Profile', '/profile_page'),
-          MyDrawerTile(const Icon(Icons.logout, size: 30, color: Colors.white,), 'Logout', '/welcome_page', inputFunction: Provider.of<MyUserInfoModel>(context, listen: false).logout,),],
-      )
+          const MyDrawerTile(
+            FontAwesomeIcons.userAstronaut,
+            'Profile',
+            '/profile_page',
+          ),
+          MyDrawerTile(
+            Icons.logout,
+            'Logout',
+            '/welcome_page',
+            inputFunction:
+                Provider.of<MyUserInfoModel>(context, listen: false).logout,
+          ),
+        ],
+      ),
     );
   }
 }

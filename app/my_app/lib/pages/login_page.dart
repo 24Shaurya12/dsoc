@@ -14,65 +14,59 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // colorScheme: const ColorScheme.light(error: Color.fromARGB(255, 218, 192, 163)),
     return Scaffold(
       appBar: const MyAppBar(),
       endDrawer: const MyEndDrawer(),
-      backgroundColor: const Color.fromARGB(255, 16, 44, 87),
       body: ListView(
         children: [
-          const Padding(
-              padding: EdgeInsets.fromLTRB(25, 20, 0, 0),
-              child: Text(
-                'Welcome Back!',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
-              )),
-          const Padding(
-              padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-              child: Text(
-                'Login to continue',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              )),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(25, 20, 0, 0),
+            child: Text(
+              'Welcome Back!',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+            child: Text(
+              'Login to continue',
+              textAlign: TextAlign.left,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
           const LoginForm(),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-            child: DefaultTextStyle(
-              style: const TextStyle(color: Colors.white, fontSize: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account?"),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Color.fromARGB(255, 218, 192, 163),
-                                width: 3))),
-                    child: GestureDetector(
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 218, 192, 163),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/registration_page');
-                      },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have an account?",
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                          color: Color.fromARGB(255, 218, 192, 163), width: 3),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                  child: GestureDetector(
+                    child: Text(
+                      'Sign Up',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: const Color.fromARGB(255, 218, 192, 163),
+                          ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/registration_page');
+                    },
+                  ),
+                )
+              ],
             ),
           )
         ],
@@ -100,93 +94,89 @@ class _LoginFormState extends State<LoginForm> {
     return Form(
       key: loginKey,
       child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Email',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-                  child:
-                      MyTextFormField(_emailController, "Please enter email")),
-              const Text(
-                'Password',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-                  child: MyTextFormField(
-                    _passwordController,
-                    "Please enter password",
-                    obscureText: true,
-                  )),
-              Row(children: [
+        padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Email',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+              child: MyTextFormField(_emailController, "Please enter email"),
+            ),
+            Text(
+              'Password',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+                child: MyTextFormField(
+                  _passwordController,
+                  "Please enter password",
+                  obscureText: true,
+                )),
+            Row(
+              children: [
                 SizedBox(
                   height: 16,
                   width: 16,
                   child: ColoredBox(
                     color: Colors.white,
                     child: Checkbox(
-                        activeColor: Colors.green,
-                        value: rememberMe,
-                        onChanged: (bool? value) {
-                          setState(() {
+                      activeColor: Colors.green,
+                      value: rememberMe,
+                      onChanged: (bool? value) {
+                        setState(
+                          () {
                             rememberMe = value!;
-                          });
-                        }),
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                const Text('Remember me',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    )),
+                Text(
+                  'Remember me',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
                 const SizedBox(
                   width: 100,
                 ),
-                const Text('Forgot password',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ]),
-              const SizedBox(
-                height: 40,
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: ElevatedButton(
-                  onPressed: () {
-                    login(loginKey);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromARGB(255, 218, 192, 163)),
-                  child: const Text('Login',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 25)),
+                Text(
+                  'Forgot password',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  login(loginKey);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 218, 192, 163),
+                ),
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
                 ),
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -195,20 +185,16 @@ class _LoginFormState extends State<LoginForm> {
 
     if (await getConnectivity() == false) {
       scaffoldMSgContent = 'No Internet! Please connect to the Internet';
-    }
-    else {
+    } else {
       if (loginKey.currentState!.validate()) {
         try {
-          await FirebaseAuth.instance
-              .signInWithEmailAndPassword(
-              email: _emailController.text,
-              password: _passwordController.text);
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
 
           scaffoldMSgContent = 'Login Successful';
           Navigator.pushNamed(context, '/home_page');
           Provider.of<MyUserInfoModel>(context, listen: false)
               .login(_emailController.text, _passwordController.text);
-
         } on FirebaseAuthException catch (e) {
           if (e.code == 'user-not-found') {
             scaffoldMSgContent = 'No user found for that email.';
