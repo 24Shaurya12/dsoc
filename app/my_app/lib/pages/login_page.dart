@@ -90,6 +90,13 @@ class _LoginFormState extends State<LoginForm> {
   final loginKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: loginKey,
@@ -125,7 +132,7 @@ class _LoginFormState extends State<LoginForm> {
                   child: ColoredBox(
                     color: Colors.white,
                     child: Checkbox(
-                      activeColor: Colors.green,
+                      activeColor: const Color.fromARGB(255, 218, 192, 102),
                       value: rememberMe,
                       onChanged: (bool? value) {
                         setState(

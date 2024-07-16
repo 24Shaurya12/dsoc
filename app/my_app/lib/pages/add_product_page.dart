@@ -59,6 +59,16 @@ class _AddProductFormState extends State<AddProductForm> {
   Image imageAdd = const Image(image: AssetImage("assets/no_image.jpg"));
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    _priceController.dispose();
+    _stockController.dispose();
+    _barcodeController.dispose();
+    _weightController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: addProductKey,

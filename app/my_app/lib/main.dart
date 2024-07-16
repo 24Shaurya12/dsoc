@@ -44,9 +44,10 @@ class MyApp extends StatelessWidget {
         '/profile_page': (context) => const ProfilePage(),
       },
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          // seedColor:  const Color.fromARGB(255, 16, 44, 87)
-          primarySwatch: Colors.amber,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor:  const Color.fromARGB(255, 16, 44, 87),
+          brightness: Brightness.dark,
+          // primarySwatch: Colors.amber,
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
