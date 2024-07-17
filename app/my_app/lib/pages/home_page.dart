@@ -104,10 +104,12 @@ class AddItemButton extends StatelessWidget {
     return SizedBox(
       width: 90,
       child: ElevatedButton(
-        onPressed: () {
-          Provider.of<MyCartListModel>(context, listen: false)
-              .addToCart(itemInfo);
-        },
+        onPressed: itemInfo.stock > 0
+            ? () {
+                Provider.of<MyCartListModel>(context, listen: false)
+                    .addToCart(itemInfo);
+              }
+            : null,
         child: const Text(
           'Add',
         ),

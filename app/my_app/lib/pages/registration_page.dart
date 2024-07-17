@@ -73,20 +73,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  helperText: '*required',
-                  helperStyle: TextStyle(
-                    color: Color.fromARGB(255, 218, 192, 102),
-                  )
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
+              child: MyTextFormField(
+                _nameController,
+                'Please enter a name',
               ),
             ),
             Text(
@@ -106,18 +95,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 35),
-              child: TextFormField(
-                controller: _passwordController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter password";
-                  }
-                  return null;
-                },
-                obscureText: true,
-                decoration: const InputDecoration(
-                  suffixIcon: Icon(Icons.remove_red_eye),
-                ),
+              child: MyTextFormField(
+                _passwordController,
+                "Please enter password",
+                passwordField: true,
               ),
             ),
             Text(

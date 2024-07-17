@@ -52,11 +52,12 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: const Color.fromARGB(255, 240, 240, 225),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
-          ),
+          suffixIconColor: const Color.fromARGB(255, 200, 190, 100),
           errorStyle: const TextStyle(
             color: Color.fromARGB(255, 218, 192, 102),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(100),
@@ -75,10 +76,10 @@ class MyApp extends StatelessWidget {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(100),
             borderSide: const BorderSide(
-              width: 2.0,
+              width: 1.0,
               color: Colors.black,
             ),
-          )
+          ),
         ),
         textTheme: const TextTheme(
           headlineLarge: TextStyle(
@@ -107,7 +108,10 @@ class MyApp extends StatelessWidget {
           labelSmall: TextStyle(
             color: Colors.white,
             fontSize: 14,
-          )
+          ),
+          bodyLarge: TextStyle(
+            color: Colors.black,
+          ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -128,6 +132,7 @@ class MyApp extends StatelessWidget {
         ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.black,
+          selectionHandleColor: Color.fromARGB(200, 218, 192, 140),
         )
       ),
       home: const WelcomePage(),

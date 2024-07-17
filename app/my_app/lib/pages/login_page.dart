@@ -122,8 +122,8 @@ class _LoginFormState extends State<LoginForm> {
                 child: MyTextFormField(
                   _passwordController,
                   "Please enter password",
-                  obscureText: true,
-                )),
+                  passwordField: true,
+                ),),
             Row(
               children: [
                 SizedBox(

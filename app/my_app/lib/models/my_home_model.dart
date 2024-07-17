@@ -13,8 +13,9 @@ class MyItemInfo {
   late int stock;
   late int cartQuantity;
 
-  MyItemInfo(this.barcode, this.productName,
-      this.weight, this.price, this.stock, this.cartQuantity, {this.image, this.imageFile});
+  MyItemInfo(this.barcode, this.productName, this.weight, this.price,
+      this.stock, this.cartQuantity,
+      {this.image, this.imageFile});
 
   // to use in firebase, have to convert this class to a map first
   Map<String, dynamic> toFirestore(String firebaseImageUrl) {
@@ -33,13 +34,15 @@ class MyItemInfo {
   ) {
     final firestoreData = firestoreDoc.data();
     return MyItemInfo(
-        firestoreData?['barcode'],
-        firestoreData?['productName'],
-        firestoreData?['weight'],
-        firestoreData?['price'],
-        firestoreData?['stock'],
-        0,
-      image: Image.network(firestoreData?['imageUrl']) ?? Image.asset('assets/no_image.jpg'),
+      firestoreData?['barcode'],
+      firestoreData?['productName'],
+      firestoreData?['weight'],
+      firestoreData?['price'],
+      firestoreData?['stock'],
+      0,
+      image: firestoreData?['imageUrl'] != null
+          ? Image.network(firestoreData?['imageUrl'])
+          : Image.asset('assets/no_image.jpg'),
     );
   }
 
@@ -63,12 +66,15 @@ class MyProductsListModel extends ChangeNotifier {
         switch (change.type) {
           case DocumentChangeType.added:
             var myItemInfo = MyItemInfo.fromFirestore(change.doc);
-            _myItemsInfoList.contains(myItemInfo) ? () : _myItemsInfoList.add(myItemInfo);
+            _myItemsInfoList.contains(myItemInfo)
+                ? ()
+                : _myItemsInfoList.add(myItemInfo);
             break;
           case DocumentChangeType.modified:
-            // TODO: Handle this case.
+          var myItemInfo = MyItemInfo.fromFirestore(change.doc);
+          _myItemsInfoList.singleWhere((item) => item.barcode == myItemInfo.barcode).stock = myItemInfo.stock;
           case DocumentChangeType.removed:
-            // TODO: Handle this case.
+          // TODO: Handle this case.
         }
 
         notifyListeners();
@@ -79,18 +85,22 @@ class MyProductsListModel extends ChangeNotifier {
   List<MyItemInfo> get myItemsInfoList => _myItemsInfoList;
 
   Future<void> localAdd(MyItemInfo myItemInfo) async {
-    await productsStorageRef.child(myItemInfo.barcode).putFile(myItemInfo.imageFile ?? File('assets/no_image.jpg'));
+    await productsStorageRef
+        .child(myItemInfo.barcode)
+        .putFile(myItemInfo.imageFile ?? File('assets/no_image.jpg'));
 
     String firebaseImageUrl;
     try {
-      firebaseImageUrl= await productsStorageRef.child(myItemInfo.barcode).getDownloadURL();
+      firebaseImageUrl =
+          await productsStorageRef.child(myItemInfo.barcode).getDownloadURL();
     } catch (e) {
       firebaseImageUrl = '';
     }
 
-    await firestoreDB.collection('Products').add(myItemInfo.toFirestore(firebaseImageUrl));
+    await firestoreDB
+        .collection('Products')
+        .add(myItemInfo.toFirestore(firebaseImageUrl));
   }
 
   MyItemInfo getByIndex(int index) => _myItemsInfoList[index];
-
 }
