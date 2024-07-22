@@ -118,12 +118,13 @@ class _LoginFormState extends State<LoginForm> {
               style: Theme.of(context).textTheme.labelLarge,
             ),
             Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
-                child: MyTextFormField(
-                  _passwordController,
-                  "Please enter password",
-                  passwordField: true,
-                ),),
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 50),
+              child: MyTextFormField(
+                _passwordController,
+                "Please enter password",
+                passwordField: true,
+              ),
+            ),
             Row(
               children: [
                 SizedBox(

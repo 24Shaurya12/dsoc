@@ -18,7 +18,7 @@ class MyItemInfo {
       {this.image, this.imageFile});
 
   // to use in firebase, have to convert this class to a map first
-  Map<String, dynamic> toFirestore(String firebaseImageUrl) {
+  Map<String, dynamic> uploadToFirestore(String firebaseImageUrl) {
     return {
       'barcode': barcode,
       'productName': productName,
@@ -29,7 +29,7 @@ class MyItemInfo {
     };
   }
 
-  factory MyItemInfo.fromFirestore(
+  factory MyItemInfo.getFromFirestore(
     DocumentSnapshot<Map<String, dynamic>> firestoreDoc,
   ) {
     final firestoreData = firestoreDoc.data();
@@ -45,6 +45,7 @@ class MyItemInfo {
           : Image.asset('assets/no_image.jpg'),
     );
   }
+
 
   @override
   int get hashCode => int.parse(barcode);
@@ -65,13 +66,13 @@ class MyProductsListModel extends ChangeNotifier {
       for (var change in event.docChanges) {
         switch (change.type) {
           case DocumentChangeType.added:
-            var myItemInfo = MyItemInfo.fromFirestore(change.doc);
+            var myItemInfo = MyItemInfo.getFromFirestore(change.doc);
             _myItemsInfoList.contains(myItemInfo)
                 ? ()
                 : _myItemsInfoList.add(myItemInfo);
             break;
           case DocumentChangeType.modified:
-          var myItemInfo = MyItemInfo.fromFirestore(change.doc);
+          var myItemInfo = MyItemInfo.getFromFirestore(change.doc);
           _myItemsInfoList.singleWhere((item) => item.barcode == myItemInfo.barcode).stock = myItemInfo.stock;
           case DocumentChangeType.removed:
           // TODO: Handle this case.
@@ -99,7 +100,7 @@ class MyProductsListModel extends ChangeNotifier {
 
     await firestoreDB
         .collection('Products')
-        .add(myItemInfo.toFirestore(firebaseImageUrl));
+        .add(myItemInfo.uploadToFirestore(firebaseImageUrl));
   }
 
   MyItemInfo getByIndex(int index) => _myItemsInfoList[index];

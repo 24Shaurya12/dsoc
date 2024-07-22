@@ -13,22 +13,43 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       appBar: const MyAppBar(),
       endDrawer: const MyEndDrawer(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<MyCartListModel>(
-              builder: (context, cartList, child) {
-                return ListView.builder(
-                  itemCount: cartList.myCartItemsInfoList.length,
-                  itemBuilder: (context, index) {
-                    var cartItemInfo = cartList.getByIndex(index);
-                    return MyItem(cartItemInfo);
-                  }
-                );
-              }
-            )
-          )
-        ],
+      body: Consumer<MyCartListModel>(
+        builder: (context, cartList, child) {
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                    itemCount: cartList.myCartItemsInfoList.length,
+                    itemBuilder: (context, index) {
+                      var cartItemInfo = cartList.getByIndex(index);
+                      return MyItem(cartItemInfo);
+                    }),
+              ),
+              const Divider(),
+              Center(
+                child: Text(
+                  'Total Price: \u{20B9}${cartList.getTotalPrice}',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(80, 20, 80, 40),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: cartList.isEmpty ? null : cartList.checkout,
+                    child: const Text(
+                      'Checkout',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
