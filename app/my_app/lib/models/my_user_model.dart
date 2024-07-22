@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyUserInfoModel extends ChangeNotifier {
   late String userName;
@@ -19,13 +20,16 @@ class MyUserInfoModel extends ChangeNotifier {
     });
 
     notifyListeners();
+
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isLoggedIn", true);
   }
 
   Future<void> signUp(String name, String email, int phoneNo) async {
     userName = name;
     userEmail = email;
-    // userPassword = password;
     userPhoneNo = phoneNo;
+
     notifyListeners();
 
     firestoreDB.collection('Users').add({
@@ -33,12 +37,17 @@ class MyUserInfoModel extends ChangeNotifier {
       'userEmail' : email,
       'phoneNo' : phoneNo,
     });
+
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isLoggedIn", true);
   }
 
   Future<void> logout() async {
     userName = 'No User logged in';
     userPhoneNo = 0;
     userEmail = 'No User logged in';
+
+    notifyListeners();
 
     final providerData = await FirebaseAuth.instance.currentUser?.providerData;
     for (final provider in providerData!) {
@@ -47,6 +56,8 @@ class MyUserInfoModel extends ChangeNotifier {
       }
     }
     await FirebaseAuth.instance.signOut();
-    notifyListeners();
+
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isLoggedIn", false);
   }
 }

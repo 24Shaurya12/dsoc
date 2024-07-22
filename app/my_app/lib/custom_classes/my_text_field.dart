@@ -20,7 +20,7 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      obscureText: passwordObscure,
+      obscureText: widget.passwordField ? passwordObscure : false,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return widget.errorMsg;
