@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../models/internet_connectivity.dart';
-import '../models/my_user_model.dart';
+import '../../models/internet_connectivity.dart';
+import '../../models/my_user_model.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});

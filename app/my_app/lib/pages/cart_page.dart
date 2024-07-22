@@ -37,7 +37,15 @@ class CartPage extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: cartList.isEmpty ? null : cartList.checkout,
+                    onPressed: () {
+                      if(cartList.isEmpty) {
+                        return;
+                      }
+                      else {
+                        cartList.checkout();
+                        Navigator.pushNamed(context, '/home_page');
+                      }
+                    },
                     child: const Text(
                       'Checkout',
                       style: TextStyle(

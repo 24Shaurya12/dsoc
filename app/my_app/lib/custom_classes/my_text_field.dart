@@ -35,9 +35,11 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
         suffixIcon: widget.passwordField
             ? GestureDetector(
                 onTap: () {
-                  setState(() {
-                    passwordObscure = !passwordObscure;
-                  });
+                  setState(
+                    () {
+                      passwordObscure = !passwordObscure;
+                    },
+                  );
                 },
                 child: Icon(
                   passwordObscure ? Icons.visibility_off : Icons.visibility,

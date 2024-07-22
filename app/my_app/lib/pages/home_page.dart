@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
 import 'package:my_app/models/my_cart_model.dart';
 import 'package:my_app/models/my_home_model.dart';
+import 'package:my_app/variables/variables.dart';
 import 'package:provider/provider.dart';
 import 'package:my_app/custom_classes/my_navigation_drawer.dart';
+import 'add_to_cart.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,43 +20,45 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(60, 40, 60, 0),
-            child: Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/add_product_page');
-                  },
-                  child: const Text(
-                    'Add Product',
-                  ),
-                ),
-                const Expanded(
-                  child: SizedBox(),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/cart_page');
-                  },
-                  child: const Text(
-                    'Cart',
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.fromLTRB(60, 30, 60, 15),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/add_product_page');
+              },
+              child: const Text(
+                'Add New Product',
+              ),
             ),
           ),
           Expanded(
             child: Consumer<MyProductsListModel>(
-                builder: (context, productList, child) {
-              return ListView.builder(
+              builder: (context, productList, child) {
+                return ListView.builder(
                   itemCount: productList.myItemsInfoList.length,
                   itemBuilder: (context, index) {
                     var itemInfo = productList.getByIndex(index);
                     return MyItem(itemInfo);
-                  });
-            }),
+                  },
+                );
+              },
+            ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addProduct(context);
+          for (var item in Provider.of<MyCartListModel>(context, listen: false)
+              .myCartItemsInfoList) {
+            print('Name: ${item.productName}, barcode: ${item.barcode}');
+          }
+          Navigator.pushNamed(context, '/cart_page');
+        },
+        backgroundColor: dsocYellow,
+        foregroundColor: Colors.black,
+        child: const Icon(
+          Icons.barcode_reader,
+        ),
       ),
     );
   }
@@ -162,6 +166,7 @@ class ChangeQuantityButton extends StatelessWidget {
                 onPressed: itemStock != 0
                     ? () {
                         cartList.addQuantity(itemInfo);
+                        print(itemInfo.cartQuantity);
                       }
                     : null,
                 child: const Icon(

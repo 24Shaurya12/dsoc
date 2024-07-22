@@ -99,7 +99,8 @@ class _AddProductFormState extends State<AddProductForm> {
                         image: AssetImage("assets/no_image.jpg"),
                       );
 
-                      String? barcodeResult = await barcodeScanner();
+                      String? barcodeResult =
+                          await barcodeScanner();
                       if (barcodeResult != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -348,20 +349,22 @@ class _AddProductFormState extends State<AddProductForm> {
           "#00FF00", "Cancel", false, ScanMode.DEFAULT);
 
       if (barcodeResult[0] == '8') {
-        SharedPreferences itemInfoSharedPreferences =
-            await SharedPreferences.getInstance();
-        await itemInfoSharedPreferences.setString("barcode", barcodeResult);
+        // SharedPreferences itemInfoSharedPreferences =
+        //     await SharedPreferences.getInstance();
+        // await itemInfoSharedPreferences.setString("barcode", barcodeResult);
         return barcodeResult;
       } else {
         return null;
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Camera Permission not granted'),
-        duration: Duration(
-          milliseconds: 1000,
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Camera Permission not granted'),
+          duration: Duration(
+            milliseconds: 1000,
+          ),
         ),
-      ));
+      );
     }
     return null;
   }

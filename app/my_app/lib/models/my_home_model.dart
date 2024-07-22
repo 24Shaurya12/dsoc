@@ -31,6 +31,7 @@ class MyItemInfo {
 
   factory MyItemInfo.getFromFirestore(
     DocumentSnapshot<Map<String, dynamic>> firestoreDoc,
+  {int cartQuantity = 0}
   ) {
     final firestoreData = firestoreDoc.data();
     return MyItemInfo(
@@ -39,13 +40,12 @@ class MyItemInfo {
       firestoreData?['weight'],
       firestoreData?['price'],
       firestoreData?['stock'],
-      0,
+      cartQuantity,
       image: firestoreData?['imageUrl'] != null
           ? Image.network(firestoreData?['imageUrl'])
           : Image.asset('assets/no_image.jpg'),
     );
   }
-
 
   @override
   int get hashCode => int.parse(barcode);
@@ -72,8 +72,10 @@ class MyProductsListModel extends ChangeNotifier {
                 : _myItemsInfoList.add(myItemInfo);
             break;
           case DocumentChangeType.modified:
-          var myItemInfo = MyItemInfo.getFromFirestore(change.doc);
-          _myItemsInfoList.singleWhere((item) => item.barcode == myItemInfo.barcode).stock = myItemInfo.stock;
+            var myItemInfo = MyItemInfo.getFromFirestore(change.doc);
+            _myItemsInfoList
+                .singleWhere((item) => item.barcode == myItemInfo.barcode)
+                .stock = myItemInfo.stock;
           case DocumentChangeType.removed:
           // TODO: Handle this case.
         }
@@ -84,6 +86,11 @@ class MyProductsListModel extends ChangeNotifier {
   }
 
   List<MyItemInfo> get myItemsInfoList => _myItemsInfoList;
+
+  MyItemInfo getByIndex(int index) => _myItemsInfoList[index];
+
+  MyItemInfo getByBarcode(String barcode) =>
+      _myItemsInfoList.singleWhere((item) => item.barcode == barcode);
 
   Future<void> localAdd(MyItemInfo myItemInfo) async {
     await productsStorageRef
@@ -102,6 +109,4 @@ class MyProductsListModel extends ChangeNotifier {
         .collection('Products')
         .add(myItemInfo.uploadToFirestore(firebaseImageUrl));
   }
-
-  MyItemInfo getByIndex(int index) => _myItemsInfoList[index];
 }

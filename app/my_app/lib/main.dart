@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/my_home_model.dart';
 import 'package:my_app/models/my_user_model.dart';
+import 'package:my_app/pages/auth_pages/login_page.dart';
 import 'package:my_app/pages/profile_page.dart';
-import 'package:my_app/pages/splash_screen.dart';
-import 'package:my_app/pages/welcome_page.dart';
-import 'package:my_app/pages/login_page.dart';
-import 'package:my_app/pages/registration_page.dart';
+import 'package:my_app/pages/auth_pages/splash_screen.dart';
+import 'package:my_app/pages/auth_pages/welcome_page.dart';
+import 'package:my_app/pages/auth_pages/registration_page.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:my_app/models/my_cart_model.dart';
-import 'package:my_app/pages/add_product_page.dart';
+import 'package:my_app/pages/add_new_product_page.dart';
 import 'package:my_app/pages/cart_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:my_app/variables/variables.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,97 +51,102 @@ class MyApp extends StatelessWidget {
         '/profile_page': (context) => const ProfilePage(),
       },
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 16, 44, 87),
-            brightness: Brightness.dark,
-            // primarySwatch: Colors.amber,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: dsocBlue,
+          brightness: Brightness.dark,
+          // primarySwatch: Colors.amber,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: dsocWhite,
+          suffixIconColor: dsocSuffixYellow,
+          errorStyle: const TextStyle(
+            color: dsocBorderYellow,
           ),
-          inputDecorationTheme: InputDecorationTheme(
-            filled: true,
-            fillColor: const Color.fromARGB(255, 240, 240, 225),
-            suffixIconColor: const Color.fromARGB(255, 200, 190, 100),
-            errorStyle: const TextStyle(
-              color: Color.fromARGB(255, 218, 192, 102),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: const BorderSide(
-                width: 1.0,
-                color: Color.fromARGB(255, 218, 192, 102),
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: const BorderSide(
-                width: 2.0,
-                color: Color.fromARGB(255, 218, 192, 102),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: const BorderSide(
-                width: 1.0,
-                color: Colors.black,
-              ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide: const BorderSide(
+              width: 1.0,
+              color: dsocBorderYellow,
             ),
           ),
-          textTheme: const TextTheme(
-            headlineLarge: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w900,
-              fontSize: 32,
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide: const BorderSide(
+              width: 2.0,
+              color: dsocBorderYellow,
             ),
-            headlineMedium: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-            ),
-            headlineSmall: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-            ),
-            labelLarge: TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-            ),
-            labelMedium: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
-            labelSmall: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-            bodyLarge: TextStyle(
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+            borderSide: const BorderSide(
+              width: 1.0,
               color: Colors.black,
             ),
           ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 218, 192, 163),
-              foregroundColor: Colors.black,
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
+        ),
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: 32,
+          ),
+          headlineMedium: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+          headlineSmall: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
+          labelLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+          ),
+          labelMedium: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          labelSmall: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          ),
+          bodyLarge: TextStyle(
+            color: Colors.black,
+          ),
+          bodySmall: TextStyle(
+            color: Colors.black54,
+            fontSize: 15,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: dsocYellow,
+            foregroundColor: Colors.black,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w800,
             ),
           ),
-          scaffoldBackgroundColor: const Color.fromARGB(255, 16, 44, 87),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color.fromARGB(255, 16, 44, 87),
-            foregroundColor: Colors.white,
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: Colors.black,
-            selectionHandleColor: Color.fromARGB(200, 218, 192, 140),
-          )),
-      home: const SplashScreen(),
+        ),
+        scaffoldBackgroundColor: dsocBlue,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: dsocBlue,
+          foregroundColor: Colors.white,
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.black,
+          selectionHandleColor: Color.fromARGB(200, 218, 192, 140),
+        ),
+      ),
+      home: const HomePage(),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:my_app/models/internet_connectivity.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:my_app/custom_classes/my_navigation_drawer.dart';
-import '../models/my_user_model.dart';
+import '../../models/my_user_model.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
