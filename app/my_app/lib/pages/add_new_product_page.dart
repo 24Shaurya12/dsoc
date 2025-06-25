@@ -20,7 +20,7 @@ class AddProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(),
-      endDrawer: const MyEndDrawer(),
+      endDrawer: const MyDrawer(),
       body: ListView(
         children: [
           Center(

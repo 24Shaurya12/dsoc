@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
+import 'package:my_app/custom_classes/my_welcome_navigation_drawer.dart';
 import 'package:my_app/models/internet_connectivity.dart';
 import 'package:my_app/models/my_user_model.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_app/custom_classes/my_text_field.dart';
-import 'package:my_app/custom_classes/my_navigation_drawer.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -16,7 +15,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(),
-      endDrawer: const MyEndDrawer(),
+      endDrawer: const MyWelcomeDrawer(),
       body: ListView(
         children: [
           Padding(

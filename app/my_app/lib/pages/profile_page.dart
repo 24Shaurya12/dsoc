@@ -11,7 +11,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(),
-      endDrawer: const MyEndDrawer(),
+      endDrawer: const MyDrawer(),
       body: Consumer<MyUserInfoModel>(
         builder: (context, userInfo, child) {
           return DefaultTextStyle(

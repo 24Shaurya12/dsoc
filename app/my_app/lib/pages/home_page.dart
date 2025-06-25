@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
       appBar: const MyAppBar(
         backOption: false,
       ),
-      endDrawer: const MyEndDrawer(),
+      endDrawer: const MyDrawer(),
       body: Column(
         children: [
           Padding(

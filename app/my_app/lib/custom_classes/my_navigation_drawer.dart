@@ -4,8 +4,8 @@ import 'package:my_app/custom_classes/my_drawer_tile.dart';
 import 'package:my_app/models/my_user_model.dart';
 import 'package:provider/provider.dart';
 
-class MyEndDrawer extends StatelessWidget {
-  const MyEndDrawer({super.key});
+class MyDrawer extends StatelessWidget {
+  const MyDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

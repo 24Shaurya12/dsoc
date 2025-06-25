@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
 import 'package:my_app/custom_classes/my_text_field.dart';
+import 'package:my_app/custom_classes/my_welcome_navigation_drawer.dart';
 import 'package:my_app/models/internet_connectivity.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
-import 'package:my_app/custom_classes/my_navigation_drawer.dart';
 import '../../models/my_user_model.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -15,7 +15,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(),
-      endDrawer: const MyEndDrawer(),
+      endDrawer: const MyWelcomeDrawer(),
       body: ListView(
         children: [
           Center(

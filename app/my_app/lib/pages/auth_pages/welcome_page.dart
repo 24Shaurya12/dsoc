@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/custom_classes/my_app_bar.dart';
-import 'package:my_app/custom_classes/my_navigation_drawer.dart';
+import 'package:my_app/custom_classes/my_welcome_navigation_drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,7 +26,7 @@ class WelcomePage extends StatelessWidget {
         appBar: const MyAppBar(
           backOption: false,
         ),
-        endDrawer: const MyEndDrawer(),
+        endDrawer: const MyWelcomeDrawer(),
         body: ListView(
           children: [
             Container(
